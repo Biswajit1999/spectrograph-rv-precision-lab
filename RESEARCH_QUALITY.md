@@ -4,7 +4,7 @@ This repository has been upgraded with a compact research-quality layer: referen
 
 ## Scope
 
-spectrograph-rv-precision-lab upgraded with reproducibility metadata and validation.
+Private spectrograph radial-velocity precision lab with photon-noise scaling and instrument-floor modelling.
 
 ## Equations And Models
 

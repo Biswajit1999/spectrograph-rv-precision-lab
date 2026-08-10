@@ -1,6 +1,6 @@
 {
   "title": "spectrograph rv precision lab",
-  "description": "spectrograph-rv-precision-lab upgraded with reproducibility metadata and validation.",
+  "description": "Private spectrograph radial-velocity precision lab with photon-noise scaling and instrument-floor modelling.",
   "equations": [
     "Repository metadata completeness",
     "Reference-data finite anchor validation",
