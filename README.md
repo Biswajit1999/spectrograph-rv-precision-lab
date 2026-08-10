@@ -41,3 +41,7 @@ Reference precision scale for stabilized optical echelle spectrographs.
 
 - Bouchy, F., Pepe, F. and Queloz, D., 2001. Fundamental photon noise limit to radial velocity measurements. Astronomy & Astrophysics, 374, pp.733-739.
 - Pepe, F. et al., 2021. ESPRESSO at VLT - On-sky performance and first results. Astronomy & Astrophysics, 645, A96.
+
+## Research Quality Upgrade
+
+See [RESEARCH_QUALITY.md](RESEARCH_QUALITY.md) for the validation layer, reference anchors, equations and research boundaries added to this repository.
