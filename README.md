@@ -98,10 +98,15 @@ The lab is a static, dependency-free front end:
 - `physicsWorker.js` — runs the numerical model off the UI thread. On each parameter change
   it computes the RV-precision curve and a parameter-response heatmap and posts the result
   back to `app.js`.
-- `data/reference.json` — a small, auditable bundle of published-style RV-precision anchor
-  points (SNR vs. m/s) with source/citation metadata, plotted alongside the live model so the
-  simulation can be visually sanity-checked against representative HARPS/ESPRESSO-class
-  numbers.
+- `data/reference.json` — five RV-precision anchor points (SNR vs. m/s) placed at the
+  approximate operating points reported in named instrument papers — HARPS design precision
+  (Mayor et al. 2003), HARPS on-sky on a bright quiet star (Pepe et al. 2011), ESPRESSO
+  on-sky performance (Pepe et al. 2021), and EXPRES demonstrated precision (Petersburg et al.
+  2020) — with source/citation metadata, plotted alongside the live model on **log-log axes**
+  (the correct presentation for a `1/SNR` photon-noise power law) so the simulation can be
+  visually sanity-checked against real instrument-class numbers. These are single
+  representative points read off each paper, not a downloadable per-exposure catalogue —
+  treat them as calibration landmarks, not a statistical sample.
 - `scripts/validate.js` / `scripts/validate_repository.mjs` — no-dependency checks that
   required files exist, JSON reference data parses and has finite values, the worker/app
   syntax is valid, citations are present, and no unfinished scaffold markers remain.
@@ -213,6 +218,10 @@ m/s, directly exposed as UI controls.
 - Pepe, F. et al., 2021. ESPRESSO at VLT - On-sky performance and first results.
   *Astronomy & Astrophysics*, 645, A96.
 - Mayor, M. et al., 2003. Setting New Standards with HARPS. *The Messenger*, 114, pp.20-24.
+- Pepe, F. et al., 2011. The HARPS search for southern extra-solar planets XXXI. *Astronomy &
+  Astrophysics*, 534, A58.
+- Petersburg, R.R. et al., 2020. An Extreme Precision Radial Velocity Pipeline: First Radial
+  Velocities from EXPRES. *The Astronomical Journal*, 159(5), 187.
 - Fischer, D.A. et al., 2016. State of the Field: Extreme Precision Radial Velocities.
   *Publications of the Astronomical Society of the Pacific*, 128, 066001.
 - Wilson, G. et al., 2017. Good enough practices in scientific computing. *PLOS

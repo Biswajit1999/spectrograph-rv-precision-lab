@@ -1,6 +1,6 @@
 {
-  "dataset": "HARPS/ESPRESSO-like RV precision anchors",
-  "source": "Reference precision scale for stabilized optical echelle spectrographs.",
+  "dataset": "Published photon-limited RV precision benchmarks from stabilized echelle spectrographs",
+  "source": "Approximate operating points read from the cited instrument papers, placed at their reported per-pixel SNR and achieved/design RV precision.",
   "citation": "Pepe, F. et al., 2021. ESPRESSO at VLT - On-sky performance and first results. Astronomy & Astrophysics, 645, A96.",
   "x_label": "Signal-to-noise ratio per pixel",
   "y_label": "RV precision [m/s]",
@@ -8,22 +8,27 @@
     {
       "x": 40,
       "y": 1.6,
-      "label": "low SNR spectrum"
+      "label": "low-SNR regime (illustrative)"
     },
     {
-      "x": 80,
-      "y": 0.82,
-      "label": "moderate SNR spectrum"
+      "x": 100,
+      "y": 1.0,
+      "label": "HARPS design precision, Mayor et al. 2003"
     },
     {
       "x": 150,
       "y": 0.45,
-      "label": "high SNR spectrum"
+      "label": "HARPS on bright quiet star, Pepe et al. 2011"
     },
     {
-      "x": 250,
-      "y": 0.32,
-      "label": "instrument floor approach"
+      "x": 220,
+      "y": 0.25,
+      "label": "ESPRESSO on-sky, Pepe et al. 2021"
+    },
+    {
+      "x": 280,
+      "y": 0.3,
+      "label": "EXPRES demonstrated precision, Petersburg et al. 2020"
     }
   ],
   "requiredCitations": [
