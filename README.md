@@ -141,6 +141,34 @@ Alongside the precision curve, the worker also produces:
 - a **parameter-response heatmap** — an illustrative 2D field (not a physical map) used to
   give the dashboard a live, information-dense visual alongside the 1D precision curve.
 
+## What the Precision Curve Actually Means: Detectable Planet Masses
+
+An RV-precision number in m/s is abstract on its own. `min_mass_4d_Mearth` and
+`min_mass_365d_Mearth` convert the current `sigma_100` precision into the smallest planet mass
+detectable at 5-sigma, for two representative orbital periods around a Sun-mass host star,
+using the standard practical semi-amplitude relation (Lovis & Fischer, 2010, "Radial Velocity
+Techniques for Exoplanets", in *Exoplanets*, ed. S. Seager, eq. 1; circular orbit, edge-on
+inclination, `Mp << Mstar`):
+
+```text
+K [m/s] = 28.4329 * (Mp / Mjup) * (Mstar / Msun)^(-2/3) * (P / 1 yr)^(-1/3)
+```
+
+solved for `Mp` at the detection threshold `K = 5 * sigma`:
+
+- **4-day period** (hot-Jupiter-like): a photon-noise-limited spectrograph at typical
+  parameters detects planets down to roughly `Mp ~ 8-40 Earth masses` here, depending on the
+  resolving power / line-density sliders — comfortably into the sub-Neptune regime.
+- **365-day period** (Earth-analog): the same precision only reaches `Mp ~ 40-180 Earth
+  masses` — Neptune-class or larger. Detecting a true Earth twin (`1 Mearth`) at a one-year
+  period requires roughly two orders of magnitude better precision than a typical
+  photon-noise-limited instrument, which is exactly why sub-`10 cm/s` "extreme precision RV"
+  spectrographs (ESPRESSO-class and beyond) exist as a distinct instrument category rather
+  than an incremental upgrade.
+
+Drag the `resolution`/`lineDepth`/`lineDensity` sliders and watch both detectable-mass numbers
+move together — they are two views of the same underlying photon budget, not independent knobs.
+
 ### Interactive controls
 
 | Control | Meaning | Default | Range |
