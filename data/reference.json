@@ -1,38 +1,40 @@
 {
-  "dataset": "Published photon-limited RV precision benchmarks from stabilized echelle spectrographs",
-  "source": "Approximate operating points read from the cited instrument papers, placed at their reported per-pixel SNR and achieved/design RV precision.",
-  "citation": "Pepe, F. et al., 2021. ESPRESSO at VLT - On-sky performance and first results. Astronomy & Astrophysics, 645, A96.",
-  "x_label": "Signal-to-noise ratio per pixel",
-  "y_label": "RV precision [m/s]",
-  "points": [
+  "dataset": "Primary-source context ledger for photon-limited radial-velocity precision",
+  "purpose": "These records constrain interpretation. They are not pooled as interchangeable chart points because design goals, formal internal errors, short-term precision, and long-baseline residuals are different estimands.",
+  "sources": [
     {
-      "x": 40,
-      "y": 1.6,
-      "label": "low-SNR regime (illustrative)"
+      "id": "bouchy-2001",
+      "citation": "Bouchy, F., Pepe, F. & Queloz, D. (2001). Fundamental photon noise limit to radial velocity measurements. Astronomy & Astrophysics, 374, 733-739.",
+      "doi": "10.1051/0004-6361:20010730",
+      "url": "https://doi.org/10.1051/0004-6361:20010730",
+      "role": "Defines the optimal spectral-weight and quality-factor formulation used by the controlled experiment.",
+      "claim_boundary": "A photon-noise lower bound conditioned on a spectrum; not total on-sky precision."
     },
     {
-      "x": 100,
-      "y": 1.0,
-      "label": "HARPS design precision, Mayor et al. 2003"
+      "id": "pepe-2021",
+      "citation": "Pepe, F. et al. (2021). ESPRESSO at VLT: On-sky performance and first results. Astronomy & Astrophysics, 645, A96.",
+      "doi": "10.1051/0004-6361/202038306",
+      "url": "https://doi.org/10.1051/0004-6361/202038306",
+      "role": "Instrument-performance context.",
+      "reported_context": "R=140000 or 190000 in one-UT modes; better than 0.25 m/s during one night and 0.50 m/s over several months, with an instrumental precision compatible with 0.10 m/s.",
+      "claim_boundary": "Reported on-sky performance under the paper's conditions; not a point on this synthetic model curve."
     },
     {
-      "x": 150,
-      "y": 0.45,
-      "label": "HARPS on bright quiet star, Pepe et al. 2011"
+      "id": "petersburg-2020",
+      "citation": "Petersburg, R. R. et al. (2020). An Extreme-precision Radial-velocity Pipeline: First Radial Velocities from EXPRES. The Astronomical Journal, 159, 187.",
+      "doi": "10.3847/1538-3881/ab7e31",
+      "url": "https://doi.org/10.3847/1538-3881/ab7e31",
+      "role": "Pipeline and achieved-precision context.",
+      "reported_context": "Median R approximately 137500; formal single-measurement error of 0.3 m/s at per-pixel S/N 250; 51 Peg fit residual RMS of 0.895 m/s.",
+      "claim_boundary": "Formal error and orbital-fit residual RMS are distinct quantities and are not combined into one benchmark point."
     },
     {
-      "x": 220,
-      "y": 0.25,
-      "label": "ESPRESSO on-sky, Pepe et al. 2021"
-    },
-    {
-      "x": 280,
-      "y": 0.3,
-      "label": "EXPRES demonstrated precision, Petersburg et al. 2020"
+      "id": "fischer-2016",
+      "citation": "Fischer, D. A. et al. (2016). State of the Field: Extreme Precision Radial Velocities. Publications of the Astronomical Society of the Pacific, 128, 066001.",
+      "doi": "10.1088/1538-3873/128/964/066001",
+      "url": "https://arxiv.org/abs/1602.07939",
+      "role": "Boundary-of-inference context for calibration, tellurics, detectors, illumination, and photospheric velocities.",
+      "claim_boundary": "Motivates omitted effects; it does not validate this synthetic spectrum as an instrument forecast."
     }
-  ],
-  "requiredCitations": [
-    "Bouchy, F., Pepe, F. and Queloz, D., 2001. Fundamental photon noise limit to radial velocity measurements. Astronomy & Astrophysics, 374, pp.733-739.",
-    "Pepe, F. et al., 2021. ESPRESSO at VLT - On-sky performance and first results. Astronomy & Astrophysics, 645, A96."
   ]
 }

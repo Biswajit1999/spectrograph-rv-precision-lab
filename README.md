@@ -1,261 +1,113 @@
 # Spectrograph RV Precision Lab
 
-Photon-limited Doppler precision, line density and instrumental resolution.
+A reproducible test of a common radial-velocity shortcut: treating Doppler
+information as proportional to resolving power, line depth, and the square root
+of line count. The version 2 study replaces the old undocumented quality-factor
+surrogate with the discrete photon-information bound of Bouchy, Pepe & Queloz
+(2001).
 
-Created and maintained by Biswajit Jana.
+[Open the evidence surface](https://biswajit1999.github.io/spectrograph-rv-precision-lab/)
+· [Read the protocol](research/protocol.json)
+· [Inspect all 288 scenarios](research/results/proxy-audit.csv)
+· [Review the claims](docs/CLAIMS.md)
 
-A zero-build, browser-based research console for exploring how a precision radial-velocity
-(RV) spectrograph's photon-noise limit and instrument systematic floor combine to set the
-achievable Doppler measurement precision, as a function of signal-to-noise ratio (SNR),
-spectral resolving power, line depth and stellar line density.
+## Result
 
-## Scientific Purpose
+The legacy proxy is calibrated to the exact model at one fiducial spectrum, then
+tested over 8 resolving powers, 4 intrinsic line widths, 3 depths, and 3 line
+counts. It is at least twofold too optimistic in **39 of 288 scenarios**. The
+largest exact-to-proxy uncertainty ratio is **2.924**, at `R=40,000`, intrinsic
+FWHM `1 km/s`, depth `0.2`, and 80 lines.
 
-This lab puts a compact reference-data bundle in front of the simulation. The app loads
-`data/reference.json` (precision anchors representative of HARPS/ESPRESSO-class stabilized
-echelle spectrographs), renders those published anchors first, then sends the adjustable
-model to `physicsWorker.js` so numerical work stays off the UI thread. The goal is a fast,
-interactive feel for how spectrograph design and observing conditions trade off against each
-other in the pursuit of sub-m/s radial-velocity precision — the regime needed to detect
-Earth-mass exoplanets via the Doppler technique.
+The assumed linear improvement with resolving power also misses saturation for
+broad stellar lines. From `R=100,000` to `R=250,000`, the proxy always claims a
+60% uncertainty reduction. The exact median reduction is only **5.86%** for
+intrinsic FWHM `10 km/s`, compared with **66.89%** for `1 km/s` lines.
 
-## Scientific Background
+The original worker had a separate dimensional defect: it used the speed of
+light in km/s while labelling the result m/s. At its default settings the shown
+number was `3.218`; using consistent m/s units with the same undocumented
+surrogate gives `3218.384`. Version 2 removes that equation rather than hiding
+the mismatch behind a new calibration.
 
-### The radial-velocity method
+## What is computed
 
-A planet orbiting a star induces a reflex wobble in the star's own motion. This wobble
-periodically Doppler-shifts the star's absorption lines, which is measured as a tiny
-line-of-sight velocity: fractions of a m/s for an Earth-mass planet around a Sun-like star,
-versus tens of m/s for a Jupiter-mass planet. Extracting that signal from noisy stellar
-spectra is fundamentally a problem of *how precisely can the centroid of a Doppler-shifted
-absorption line be measured*, repeated over thousands of spectral lines and combined.
-
-### The photon-noise limit
-
-Bouchy, Pepe & Queloz (2001, A&A 374, 733) showed that, for a spectrum with per-pixel
-signal-to-noise ratio `SNR`, the photon-noise-limited radial-velocity precision scales as
-
-```
-sigma_RV(photon) = c / (Q * SNR)
-```
-
-where `c` is the speed of light and `Q` is a dimensionless quality factor that encodes how
-much Doppler information a spectrum actually carries. `Q` grows with:
-
-- **Spectral resolving power `R`** — narrower, better-resolved lines have steeper flux
-  gradients per unit velocity shift, so a given photon-noise fluctuation moves the apparent
-  line centroid less.
-- **Line depth** — deeper absorption lines (higher contrast against the continuum) give a
-  steeper local flux gradient and therefore more leverage on the Doppler shift per photon.
-- **Line density** (the number of usable spectral lines per unit wavelength, integrated
-  across the instrument's wavelength coverage) — more independent lines means more
-  independent centroid measurements to average over, improving the combined precision as
-  roughly the square root of the number of lines.
-
-This is exactly the photon-noise-only limit: it says nothing about calibration drift,
-guiding errors, detector charge-transfer effects, telluric contamination, or stellar
-activity (granulation, spots, oscillations) — all of which are addressed separately as an
-**instrument/astrophysical floor**.
-
-### The instrument systematic floor
-
-In practice, no spectrograph reaches arbitrarily good precision just by collecting more
-photons. Below some noise floor, wavelength-calibration stability (laser frequency combs or
-Fabry-Pérot etalons in HARPS/ESPRESSO-class instruments), thermal and pressure control of
-the spectrograph, fiber-scrambling and illumination stability, and detector systematics
-dominate over photon noise. This is typically modelled as an SNR-independent term added in
-quadrature to the photon-noise term:
-
-```
-sigma_RV(total) = sqrt( sigma_RV(photon)^2 + sigma_floor^2 )
-```
-
-ESPRESSO at VLT (Pepe et al. 2021, A&A 645, A96) demonstrated on-sky RV precision
-approaching this regime, with photon noise dominating at moderate SNR and instrumental /
-astrophysical stability terms dominating once photon noise is driven below roughly the
-sub-m/s level. HARPS, HARPS-N, EXPRES and similar ultra-stable echelle spectrographs follow
-the same two-term structure, differing mainly in their achieved `Q` factor (resolving power,
-optical design, detector) and in how low their systematic floor sits.
-
-### Why this matters
-
-Detecting an Earth-twin around a Sun-like star requires isolating a ~9 cm/s reflex signal
-buried in stellar noise and instrumental systematics of comparable or larger size. The two
-terms above — the photon-noise limit and the instrument floor — define the two regimes an
-instrument designer and an observer both have to reason about: "how many more photons do I
-need" versus "what is the hard floor no amount of exposure time will get me below."
-
-## How It Works
-
-The lab is a static, dependency-free front end:
-
-- `index.html` — the mission-control interface: a controls panel, a reference-data +
-  simulation plot, a parameter-response heatmap, and a telemetry/metrics panel.
-- `styles.css` — dense dark scientific dashboard styling.
-- `app.js` — owns UI state, builds the control sliders from the `LAB` definition, loads
-  `data/reference.json`, posts parameter updates to the worker, and renders both the line
-  plot and the heatmap on `<canvas>` elements using vanilla Canvas 2D (no charting library).
-- `physicsWorker.js` — runs the numerical model off the UI thread. On each parameter change
-  it computes the RV-precision curve and a parameter-response heatmap and posts the result
-  back to `app.js`.
-- `data/reference.json` — five RV-precision anchor points (SNR vs. m/s) placed at the
-  approximate operating points reported in named instrument papers — HARPS design precision
-  (Mayor et al. 2003), HARPS on-sky on a bright quiet star (Pepe et al. 2011), ESPRESSO
-  on-sky performance (Pepe et al. 2021), and EXPRES demonstrated precision (Petersburg et al.
-  2020) — with source/citation metadata, plotted alongside the live model on **log-log axes**
-  (the correct presentation for a `1/SNR` photon-noise power law) so the simulation can be
-  visually sanity-checked against real instrument-class numbers. These are single
-  representative points read off each paper, not a downloadable per-exposure catalogue —
-  treat them as calibration landmarks, not a statistical sample.
-- `scripts/validate.js` / `scripts/validate_repository.mjs` — no-dependency checks that
-  required files exist, JSON reference data parses and has finite values, the worker/app
-  syntax is valid, citations are present, and no unfinished scaffold markers remain.
-- `research-overlay.js` — a non-invasive mission-control panel layered on top of the main UI
-  that surfaces validation status and benchmark telemetry from `data/research-reference.json`.
-
-### The model (`spectrograph` function in `physicsWorker.js`)
-
-For an SNR sweep from 20 to 300 per pixel, the worker computes:
-
-```js
-const q = 1800 * resolution * lineDepth * Math.sqrt(lineDensity);
-const sigma = Math.sqrt((c / (q * snr)) ** 2 + stability ** 2);
-```
-
-with `c` the speed of light in km/s, `resolution` the resolving power `R` in units of
-100,000, `lineDepth` the mean fractional line depth, `lineDensity` a dimensionless scale on
-the number of usable spectral lines, and `stability` the instrument systematic floor in m/s.
-This is a direct implementation of the two-term photon-noise-plus-floor structure described
-above, with the `1800 * R * depth * sqrt(density)` prefactor standing in for the empirical
-`Q`-factor scaling (`Q` rises with resolving power, line contrast and the square root of the
-number of independent lines, matching the Bouchy et al. 2001 derivation).
-
-Alongside the precision curve, the worker also produces:
-
-- `metrics.Q_factor` — the effective quality factor for the current parameters.
-- `metrics.sigma_100` — the model's RV precision at SNR = 100, a standard benchmark point.
-- `metrics.floor` — the current instrument floor parameter, echoed back for the telemetry panel.
-- `metrics.snr_floor_crossover` — the SNR at which the photon-noise term equals the
-  instrument floor (`c / (Q * stability)`), i.e. the point beyond which collecting more
-  photons stops improving precision and the systematic floor dominates.
-- a **parameter-response heatmap** — an illustrative 2D field (not a physical map) used to
-  give the dashboard a live, information-dense visual alongside the 1D precision curve.
-
-## What the Precision Curve Actually Means: Detectable Planet Masses
-
-An RV-precision number in m/s is abstract on its own. `min_mass_4d_Mearth` and
-`min_mass_365d_Mearth` convert the current `sigma_100` precision into the smallest planet mass
-detectable at 5-sigma, for two representative orbital periods around a Sun-mass host star,
-using the standard practical semi-amplitude relation (Lovis & Fischer, 2010, "Radial Velocity
-Techniques for Exoplanets", in *Exoplanets*, ed. S. Seager, eq. 1; circular orbit, edge-on
-inclination, `Mp << Mstar`):
+For each synthetic spectrum, Gaussian intrinsic lines are convolved with a
+Gaussian instrumental line-spread function. Equivalent width is conserved.
+The continuum electron budget and velocity coverage are fixed while resolving
+power changes. The code evaluates the independent-Poisson Fisher information
+for a common Doppler shift:
 
 ```text
-K [m/s] = 28.4329 * (Mp / Mjup) * (Mstar / Msun)^(-2/3) * (P / 1 yr)^(-1/3)
+I(v) = Σᵢ [1 / Aᵢ] [∂Aᵢ / ∂v]²
+σᵥ,photon = 1 / √I(v)
+Q = c √[I(v) / Σᵢ Aᵢ]
 ```
 
-solved for `Mp` at the detection threshold `K = 5 * sigma`:
+This is algebraically equivalent to `σᵥ = c / (Q √Nₑ)` for the declared
+discrete spectrum. It is a lower bound under the model—not an achieved RV
+precision.
 
-- **4-day period** (hot-Jupiter-like): a photon-noise-limited spectrograph at typical
-  parameters detects planets down to roughly `Mp ~ 8-40 Earth masses` here, depending on the
-  resolving power / line-density sliders — comfortably into the sub-Neptune regime.
-- **365-day period** (Earth-analog): the same precision only reaches `Mp ~ 40-180 Earth
-  masses` — Neptune-class or larger. Detecting a true Earth twin (`1 Mearth`) at a one-year
-  period requires roughly two orders of magnitude better precision than a typical
-  photon-noise-limited instrument, which is exactly why sub-`10 cm/s` "extreme precision RV"
-  spectrographs (ESPRESSO-class and beyond) exist as a distinct instrument category rather
-  than an incremental upgrade.
+## Reproduce
 
-Drag the `resolution`/`lineDepth`/`lineDensity` sliders and watch both detectable-mass numbers
-move together — they are two views of the same underlying photon budget, not independent knobs.
-
-### Interactive controls
-
-| Control | Meaning | Default | Range |
-|---|---|---|---|
-| `resolution` | Resolving power `R` / 100,000 | 1.15 | 0.4 - 2.5 |
-| `lineDepth` | Mean spectral line depth | 0.45 | 0.05 - 0.85 |
-| `lineDensity` | Line density scale | 1.0 | 0.2 - 2.5 |
-| `stability` | Instrument floor [m/s] | 0.3 | 0.01 - 3 |
-
-Moving any slider re-posts the parameter set to `physicsWorker.js`, which recomputes the
-curve, metrics and heatmap and sends them back for redraw — the UI thread never blocks on
-the numerics.
-
-## Usage
+Node.js 20 or newer is sufficient; there are no runtime dependencies.
 
 ```bash
-python -m http.server 8080
+npm run verify
 ```
 
-Open `http://localhost:8080` and move the sliders to see how resolving power, line depth,
-line density and instrument floor reshape the photon-noise-limited precision curve relative
-to the plotted HARPS/ESPRESSO-class reference anchors.
+That command regenerates the full CSV, JSON summary, scientific figure, and
+maturity comparison; runs the numerical tests; checks source/model hashes; and
+validates the public evidence surface. The primary four-pixels-per-resolution-
+element calculation was repeated at eight pixels per resolution element. The
+maximum relative change is below `1.2e-6` (0.00012%), with zero changes to the
+39 primary classifications.
 
-## Validate
+## Evidence map
 
-```bash
-npm run check
-npm run validate:research
-```
+| Evidence | Location |
+|---|---|
+| Frozen question and grid | [`research/protocol.json`](research/protocol.json) |
+| Complete scenario table | [`research/results/proxy-audit.csv`](research/results/proxy-audit.csv) |
+| Machine-readable headline results | [`research/results/summary.json`](research/results/summary.json) |
+| Comparison figure | [`research/figures/proxy-optimism-by-resolution.svg`](research/figures/proxy-optimism-by-resolution.svg) |
+| Scientific implementation | [`src/rv-model.js`](src/rv-model.js) |
+| Methods and equations | [`docs/METHODS.md`](docs/METHODS.md) |
+| Claim ledger | [`docs/CLAIMS.md`](docs/CLAIMS.md) |
+| Limitations | [`docs/LIMITATIONS.md`](docs/LIMITATIONS.md) |
+| Replay contract | [`docs/REPRODUCIBILITY.md`](docs/REPRODUCIBILITY.md) |
+| Baseline audit | [`docs/BASELINE_AUDIT.md`](docs/BASELINE_AUDIT.md) |
 
-`npm run check` verifies required files exist, `data/reference.json` parses with finite
-values, `app.js` and `physicsWorker.js` have valid syntax, citations are present, and no
-unfinished scaffold tokens remain. `npm run validate:research` runs the additional
-research-quality checks described in [RESEARCH_QUALITY.md](RESEARCH_QUALITY.md) against
-`data/research-reference.json`.
+## Boundary of inference
 
-## Physics / Math Appendix
+This is a controlled synthetic Fisher-information experiment. It is not an
+end-to-end spectrograph forecast, exposure-time calculator, stellar-template
+analysis, wavelength-calibration model, or planet-detection completeness study.
+The optional quadrature floor in the browser is an illustrative independent
+repeatability term; it is not a measured property of any instrument. Published
+ESPRESSO and EXPRES performance values are kept in a contextual source ledger
+and are not pooled as interchangeable points.
 
-**Photon-noise RV precision (Bouchy et al. 2001):**
+## Primary references
 
-```
-sigma_RV(photon) = c / (Q * SNR)
-```
+- Bouchy, F., Pepe, F. & Queloz, D. (2001), *A&A* 374, 733–739.
+  <https://doi.org/10.1051/0004-6361:20010730>
+- Pepe, F. et al. (2021), *A&A* 645, A96.
+  <https://doi.org/10.1051/0004-6361/202038306>
+- Petersburg, R. R. et al. (2020), *AJ* 159, 187.
+  <https://doi.org/10.3847/1538-3881/ab7e31>
+- Fischer, D. A. et al. (2016), *PASP* 128, 066001.
+  <https://doi.org/10.1088/1538-3873/128/964/066001>
 
-- `c` — speed of light
-- `SNR` — signal-to-noise ratio per pixel (or per resolution element)
-- `Q` — spectral quality factor, increasing with resolving power `R`, line contrast/depth,
-  and the number of usable spectral lines (roughly `sqrt(N_lines)`)
+## Research-practice maturity
 
-**Combined precision with an SNR-independent instrument floor:**
+The documented repository-practice rubric changes from **41/100 before** to
+**95/100 after**. This score measures the presence of auditable questions,
+methods, provenance, validation, generated evidence, and claim boundaries. It
+is not peer review, an instrument-performance score, or a literal multiplier of
+scientific quality.
 
-```
-sigma_RV(total) = sqrt( sigma_RV(photon)^2 + sigma_floor^2 )
-```
+## License
 
-This quadrature-sum structure is the standard way of combining an independent statistical
-term (photon noise, which improves with more signal) and a systematic term (calibration,
-thermal/mechanical stability, detector effects, stellar jitter) that does not improve with
-exposure time or SNR.
-
-**Model implementation in this repository:**
-
-```
-Q_effective = 1800 * R * lineDepth * sqrt(lineDensity)
-sigma(SNR)  = sqrt( (c / (Q_effective * SNR))^2 + stability^2 )
-```
-
-where `R` is `resolution` in units of 100,000, and `stability` is the instrument floor in
-m/s, directly exposed as UI controls.
-
-## References
-
-- Bouchy, F., Pepe, F. and Queloz, D., 2001. Fundamental photon noise limit to radial
-  velocity measurements. *Astronomy & Astrophysics*, 374, pp.733-739.
-- Pepe, F. et al., 2021. ESPRESSO at VLT - On-sky performance and first results.
-  *Astronomy & Astrophysics*, 645, A96.
-- Mayor, M. et al., 2003. Setting New Standards with HARPS. *The Messenger*, 114, pp.20-24.
-- Pepe, F. et al., 2011. The HARPS search for southern extra-solar planets XXXI. *Astronomy &
-  Astrophysics*, 534, A58.
-- Petersburg, R.R. et al., 2020. An Extreme Precision Radial Velocity Pipeline: First Radial
-  Velocities from EXPRES. *The Astronomical Journal*, 159(5), 187.
-- Fischer, D.A. et al., 2016. State of the Field: Extreme Precision Radial Velocities.
-  *Publications of the Astronomical Society of the Pacific*, 128, 066001.
-- Wilson, G. et al., 2017. Good enough practices in scientific computing. *PLOS
-  Computational Biology*, 13(6), p.e1005510.
-
-## Research Quality Upgrade
-
-See [RESEARCH_QUALITY.md](RESEARCH_QUALITY.md) for the validation layer, reference anchors,
-equations and research boundaries added to this repository.
+Code is available under the [MIT License](LICENSE). Citation metadata are in
+[`CITATION.cff`](CITATION.cff).

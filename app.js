@@ -1,19 +1,195 @@
-const LAB={"id":"spectrograph","title":"Spectrograph RV Precision Lab","xLabel":"Signal-to-noise ratio per pixel (log scale)","yLabel":"RV precision [m/s] (log scale)","logLog":true,"controls":[["resolution","Resolving power R / 100000",1.15,0.4,2.5,0.01],["lineDepth","Mean line depth",0.45,0.05,0.85,0.01],["lineDensity","Line density scale",1,0.2,2.5,0.01],["stability","Instrument floor [m/s]",0.3,0.01,3,0.01]]};
-const state={reference:null,params:Object.fromEntries(LAB.controls.map(c=>[c[0],c[2]])),result:null,worker:null,run:0,lastFrame:performance.now(),frames:0};
-const $=id=>document.getElementById(id);
-function fmt(v,d=3){return Number.isFinite(Number(v))?Number(v).toLocaleString('en-US',{maximumFractionDigits:d}):'--'}
-function buildControls(){const root=$('controls');root.innerHTML='';for(const c of LAB.controls){const [key,label,value,min,max,step]=c;const wrap=document.createElement('label');wrap.innerHTML=`${label} <output id="out-${key}">${value}</output><input id="ctrl-${key}" type="range" min="${min}" max="${max}" step="${step}" value="${value}">`;root.appendChild(wrap);$('ctrl-'+key).addEventListener('input',e=>{state.params[key]=Number(e.target.value);$('out-'+key).textContent=e.target.value;runModel()})}}
-async function loadReference(){const response=await fetch('data/reference.json',{cache:'no-cache'});if(!response.ok)throw Error('reference data HTTP '+response.status);state.reference=await response.json();$('referenceLabel').textContent=state.reference.dataset;$('notes').textContent=state.reference.source+'\n\n'+state.reference.citation}
-function getWorker(){if(state.worker)return state.worker;state.worker=new Worker('physicsWorker.js');state.worker.onmessage=e=>{state.result=e.data;draw();renderMetrics();$('workerStatus').textContent='Worker ready'};state.worker.onerror=e=>{$('workerStatus').textContent='Worker error: '+e.message};return state.worker}
-function runModel(){const worker=getWorker();state.run+=1;$('runId').textContent='run '+String(state.run).padStart(3,'0');worker.postMessage({lab:LAB.id,params:state.params,reference:state.reference})}
-const LOG=LAB.logLog;
-const toLog=v=>LOG?Math.log10(Math.max(v,1e-6)):v;
-function bounds(series,points){const xs=[],ys=[];for(const s of series||[]){xs.push(...s.x);ys.push(...s.y)}for(const p of points||[]){xs.push(p.x);ys.push(p.y)}const raw={minX:Math.min(...xs),maxX:Math.max(...xs),minY:Math.min(...ys),maxY:Math.max(...ys)};if(!LOG)return raw;return{minX:toLog(raw.minX),maxX:toLog(raw.maxX),minY:toLog(raw.minY),maxY:toLog(raw.maxY)}}
-function drawAxes(ctx,w,h,b){ctx.strokeStyle='rgba(148,163,184,.35)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(70,28);ctx.lineTo(70,h-58);ctx.lineTo(w-24,h-58);ctx.stroke();ctx.fillStyle='#8b93a3';ctx.font='12px Consolas, monospace';ctx.fillText(LAB.yLabel,18,22);ctx.fillText(LAB.xLabel,w-260,h-20);for(let i=0;i<=5;i++){const x=70+(w-100)*i/5,y=h-58-(h-90)*i/5;const xv=b.minX+(b.maxX-b.minX)*i/5,yv=b.minY+(b.maxY-b.minY)*i/5;ctx.fillText(fmt(LOG?10**xv:xv,LOG?1:2),x-18,h-38);ctx.fillText(fmt(LOG?10**yv:yv,LOG?2:2),18,y+4);ctx.strokeStyle='rgba(148,163,184,.10)';ctx.beginPath();ctx.moveTo(x,28);ctx.lineTo(x,h-58);ctx.moveTo(70,y);ctx.lineTo(w-24,y);ctx.stroke()}}
-function drawSeries(){const canvas=$('seriesCanvas'),ctx=canvas.getContext('2d'),w=canvas.width,h=canvas.height;ctx.clearRect(0,0,w,h);const series=state.result?.series||[],points=state.reference?.points||[],b=bounds(series,points);const padY=(b.maxY-b.minY||1)*.12;b.minY-=padY;b.maxY+=padY;drawAxes(ctx,w,h,b);const sx=x=>70+(toLog(x)-b.minX)/(b.maxX-b.minX||1)*(w-100),sy=y=>h-58-(toLog(y)-b.minY)/(b.maxY-b.minY||1)*(h-90);for(const s of series){ctx.strokeStyle=s.color||'#4fb8a8';ctx.lineWidth=2;ctx.beginPath();s.x.forEach((x,i)=>{const px=sx(x),py=sy(s.y[i]);if(i)ctx.lineTo(px,py);else ctx.moveTo(px,py)});ctx.stroke();ctx.fillStyle=s.color||'#4fb8a8';ctx.fillText(s.name,90,48+18*series.indexOf(s))}for(const p of points){const x=sx(p.x),y=sy(p.y);ctx.fillStyle='#ffd166';ctx.strokeStyle='#14171d';ctx.lineWidth=2;ctx.beginPath();ctx.arc(x,y,5,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.fillStyle='#eef1f6';ctx.fillText(p.label||'reference',x+8,y-8)}}
-function drawHeatmap(){const canvas=$('heatCanvas'),ctx=canvas.getContext('2d'),w=canvas.width,h=canvas.height;const m=state.result?.heatmap;if(!m)return;const img=ctx.createImageData(w,h);for(let y=0;y<h;y++){for(let x=0;x<w;x++){const ix=Math.floor(x/w*m.n),iy=Math.floor(y/h*m.n),v=m.values[iy*m.n+ix];const o=(y*w+x)*4;img.data[o]=Math.min(255,20+240*v);img.data[o+1]=Math.min(255,70+190*Math.sqrt(v));img.data[o+2]=Math.min(255,120+100*(1-v));img.data[o+3]=255}}ctx.putImageData(img,0,0);ctx.fillStyle='rgba(11,15,25,.78)';ctx.fillRect(12,12,260,54);ctx.fillStyle='#eef1f6';ctx.font='13px Consolas, monospace';ctx.fillText(m.label,24,44)}
-function draw(){drawSeries();drawHeatmap()}
-function renderMetrics(){const root=$('metrics');root.innerHTML='';for(const [k,v] of Object.entries(state.result?.metrics||{})){const d=document.createElement('div');d.className='metric';d.innerHTML=`<span>${k}</span><strong>${fmt(v,4)}</strong>`;root.appendChild(d)}}
-function tick(now){state.frames++;if(now-state.lastFrame>1000){$('frameRate').textContent=Math.round(state.frames*1000/(now-state.lastFrame))+' fps';state.frames=0;state.lastFrame=now}requestAnimationFrame(tick)}
-$('reset').addEventListener('click',()=>{for(const c of LAB.controls){state.params[c[0]]=c[2];$('ctrl-'+c[0]).value=c[2];$('out-'+c[0]).textContent=c[2]}runModel()});
-buildControls();loadReference().then(runModel).catch(err=>{$('workerStatus').textContent='Reference error';$('notes').textContent=err.message});requestAnimationFrame(tick);
+const DEFAULTS = Object.freeze({
+  resolution: 100000,
+  intrinsicFwhmKmS: 2.5,
+  lineDepth: 0.45,
+  lineCount: 40,
+  logElectrons: 9,
+  floorMs: 0
+});
+
+const ids = Object.keys(DEFAULTS);
+const state = { worker: null, timer: null, run: 0 };
+const element = id => document.getElementById(id);
+const number = (value, digits = 3) => Number(value).toLocaleString('en-GB', { maximumFractionDigits: digits });
+const scientific = value => Number(value).toExponential(2).replace('e+', 'e');
+
+function parameters() {
+  return {
+    resolution: Number(element('resolution').value),
+    intrinsicFwhmKmS: Number(element('intrinsicFwhmKmS').value),
+    lineDepth: Number(element('lineDepth').value),
+    lineCount: Number(element('lineCount').value),
+    totalContinuumElectrons: 10 ** Number(element('logElectrons').value),
+    velocitySpanMs: 3e6,
+    pixelsPerResolutionElement: 4,
+    floorMs: Number(element('floorMs').value)
+  };
+}
+
+function updateOutputs() {
+  element('out-resolution').textContent = Number(element('resolution').value).toLocaleString('en-GB');
+  element('out-intrinsicFwhmKmS').textContent = `${Number(element('intrinsicFwhmKmS').value).toFixed(1)} km/s`;
+  element('out-lineDepth').textContent = Number(element('lineDepth').value).toFixed(2);
+  element('out-lineCount').textContent = element('lineCount').value;
+  element('out-logElectrons').textContent = `10${superscript(Number(element('logElectrons').value))} e⁻`;
+  element('out-floorMs').textContent = `${Number(element('floorMs').value).toFixed(2)} m/s`;
+}
+
+function superscript(value) {
+  const glyphs = { '-': '⁻', '.': '·', '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹' };
+  return String(value).split('').map(character => glyphs[character] ?? character).join('');
+}
+
+function requestModel() {
+  clearTimeout(state.timer);
+  state.timer = setTimeout(() => {
+    state.run += 1;
+    element('workerStatus').textContent = `Computing run ${state.run}`;
+    state.worker.postMessage({ runId: state.run, parameters: parameters() });
+  }, 100);
+}
+
+function renderChart(series, currentResolution) {
+  const width = 900;
+  const height = 430;
+  const margin = { left: 78, right: 32, top: 42, bottom: 62 };
+  const plotWidth = width - margin.left - margin.right;
+  const plotHeight = height - margin.top - margin.bottom;
+  const allY = series.flatMap(item => item.y);
+  const yMin = Math.min(...allY) * 0.75;
+  const yMax = Math.max(...allY) * 1.35;
+  const logMin = Math.log10(yMin);
+  const logMax = Math.log10(yMax);
+  const sx = value => margin.left + (value - 40000) / 210000 * plotWidth;
+  const sy = value => margin.top + (logMax - Math.log10(value)) / (logMax - logMin) * plotHeight;
+  const colours = ['#67ddd0', '#f3ad55'];
+  const xTicks = [40000, 80000, 120000, 160000, 200000, 250000];
+  const yTicks = [0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50].filter(value => value >= yMin && value <= yMax);
+  const parts = [
+    `<svg viewBox="0 0 ${width} ${height}" role="img" aria-labelledby="chart-title chart-desc">`,
+    '<title id="chart-title">Photon-information uncertainty and legacy proxy by resolving power</title>',
+    '<desc id="chart-desc">A logarithmic uncertainty chart. The exact Fisher bound is teal and the calibrated legacy linear-resolution proxy is amber.</desc>'
+  ];
+  for (const tick of yTicks) {
+    const y = sy(tick);
+    parts.push(`<line x1="${margin.left}" y1="${y}" x2="${width - margin.right}" y2="${y}" stroke="#35506b" stroke-width="1"/>`);
+    parts.push(`<text x="${margin.left - 12}" y="${y + 4}" text-anchor="end" fill="#aebfcd" font-family="ui-monospace,monospace" font-size="12">${tick}</text>`);
+  }
+  for (const tick of xTicks) {
+    const x = sx(tick);
+    parts.push(`<line x1="${x}" y1="${margin.top}" x2="${x}" y2="${height - margin.bottom}" stroke="#2a4560" stroke-width="1"/>`);
+    parts.push(`<text x="${x}" y="${height - margin.bottom + 25}" text-anchor="middle" fill="#aebfcd" font-family="ui-monospace,monospace" font-size="12">${tick / 1000}k</text>`);
+  }
+  const currentX = sx(currentResolution);
+  parts.push(`<line x1="${currentX}" y1="${margin.top}" x2="${currentX}" y2="${height - margin.bottom}" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="5 6" opacity=".75"/>`);
+  parts.push(`<text x="${currentX}" y="${margin.top - 12}" text-anchor="middle" fill="#ffffff" font-family="ui-monospace,monospace" font-size="11">current R</text>`);
+  series.forEach((item, index) => {
+    const path = item.x.map((x, point) => `${point ? 'L' : 'M'}${sx(x).toFixed(2)} ${sy(item.y[point]).toFixed(2)}`).join(' ');
+    parts.push(`<path d="${path}" fill="none" stroke="${colours[index]}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`);
+  });
+  parts.push(`<line x1="${margin.left}" y1="${height - margin.bottom}" x2="${width - margin.right}" y2="${height - margin.bottom}" stroke="#6d8194"/>`);
+  parts.push(`<line x1="${margin.left}" y1="${margin.top}" x2="${margin.left}" y2="${height - margin.bottom}" stroke="#6d8194"/>`);
+  parts.push(`<text x="${margin.left}" y="20" fill="${colours[0]}" font-family="Inter,Arial,sans-serif" font-size="13" font-weight="700">— Exact Fisher bound</text>`);
+  parts.push(`<text x="${margin.left + 190}" y="20" fill="${colours[1]}" font-family="Inter,Arial,sans-serif" font-size="13" font-weight="700">— Legacy proxy</text>`);
+  parts.push(`<text x="${width / 2}" y="${height - 15}" text-anchor="middle" fill="#d6e2eb" font-family="Inter,Arial,sans-serif" font-size="13" font-weight="700">Resolving power R</text>`);
+  parts.push(`<text transform="translate(20 ${height / 2}) rotate(-90)" text-anchor="middle" fill="#d6e2eb" font-family="Inter,Arial,sans-serif" font-size="13" font-weight="700">Photon uncertainty [m/s] · log scale</text>`);
+  parts.push('</svg>');
+  element('curveChart').innerHTML = parts.join('');
+}
+
+function renderMetrics(current) {
+  const metrics = [
+    ['Photon lower bound', `${number(current.photonSigmaMs, 4)} m/s`],
+    ['With optional floor', `${number(current.totalSigmaMs, 4)} m/s`],
+    ['Bouchy Q', number(current.qualityFactor, 0)],
+    ['Observed line depth', number(current.observedDepth, 4)],
+    ['Exact ÷ proxy', `${number(current.legacyOptimismFactor, 3)}×`],
+    ['Gain to R=250k', `${number(current.gainTo250kPercent, 2)}%`]
+  ];
+  element('metrics').innerHTML = metrics.map(([label, value]) => `<div class="metric"><span>${label}</span><strong>${value}</strong></div>`).join('');
+}
+
+function cellColour(value) {
+  if (value >= 2) return '#a85f00';
+  if (value >= 1.25) return '#167f76';
+  if (value >= 0.8) return '#2c6976';
+  return '#3d5d7a';
+}
+
+function renderHeatmap(heatmap) {
+  const byKey = new Map(heatmap.cells.map(cell => [`${cell.intrinsicFwhmKmS}:${cell.resolution}`, cell.optimismFactor]));
+  const header = heatmap.resolutions.map(value => `<th scope="col">${value / 1000}k</th>`).join('');
+  const rows = heatmap.widths.map(width => {
+    const cells = heatmap.resolutions.map(resolution => {
+      const value = byKey.get(`${width}:${resolution}`);
+      const label = `${number(value, 2)} times at intrinsic FWHM ${width} kilometres per second and resolving power ${resolution}`;
+      return `<td style="background:${cellColour(value)}" aria-label="${label}">${number(value, 2)}×</td>`;
+    }).join('');
+    return `<tr><th scope="row">${width} km/s</th>${cells}</tr>`;
+  }).join('');
+  element('heatmap').innerHTML = `<table class="heatmap"><caption class="visually-hidden">Exact uncertainty divided by legacy proxy uncertainty</caption><thead><tr><th scope="col">Intrinsic FWHM</th>${header}</tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>'"]/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[character]);
+}
+
+async function loadPublishedEvidence() {
+  try {
+    const [summaryResponse, sourceResponse] = await Promise.all([
+      fetch('research/results/summary.json', { cache: 'no-cache' }),
+      fetch('data/reference.json', { cache: 'no-cache' })
+    ]);
+    if (!summaryResponse.ok || !sourceResponse.ok) throw new Error('evidence request failed');
+    const summary = await summaryResponse.json();
+    const ledger = await sourceResponse.json();
+    element('materialCount').textContent = summary.primary_result.materially_optimistic_scenarios;
+    element('maximumFactor').textContent = `${number(summary.primary_result.maximum_optimism_factor, 3)}×`;
+    element('sourceCards').innerHTML = ledger.sources.map(source => `
+      <article class="source-card">
+        <span>${escapeHtml(source.id)}</span>
+        <h3>${escapeHtml(source.citation)}</h3>
+        <p>${escapeHtml(source.claim_boundary)}</p>
+        <a href="${escapeHtml(source.url)}">Open primary source →</a>
+      </article>
+    `).join('');
+  } catch (error) {
+    element('sourceCards').innerHTML = '<p>Primary-source ledger could not be loaded. It remains available as <a href="data/reference.json">JSON</a>.</p>';
+  }
+}
+
+function initialise() {
+  state.worker = new Worker('physicsWorker.js?v=2.0.0');
+  state.worker.onmessage = event => {
+    if (event.data.runId !== state.run) return;
+    if (!event.data.ok) {
+      element('workerStatus').textContent = `Model error: ${event.data.error}`;
+      return;
+    }
+    const result = event.data.payload;
+    renderChart(result.series, parameters().resolution);
+    renderMetrics(result.current);
+    renderHeatmap(result.heatmap);
+    element('workerStatus').textContent = `Run ${state.run} complete`;
+  };
+  state.worker.onerror = event => {
+    element('workerStatus').textContent = `Worker error: ${event.message}`;
+  };
+
+  for (const id of ids) {
+    element(id).addEventListener('input', () => {
+      updateOutputs();
+      requestModel();
+    });
+  }
+  element('reset').addEventListener('click', () => {
+    for (const [id, value] of Object.entries(DEFAULTS)) element(id).value = value;
+    updateOutputs();
+    requestModel();
+  });
+  updateOutputs();
+  requestModel();
+  loadPublishedEvidence();
+}
+
+initialise();

@@ -1,25 +1,19 @@
-# Research Quality Upgrade
+# Research quality contract
 
-This repository has been upgraded with a compact research-quality layer: reference anchors, validation checks, and explicit scientific/software boundaries.
+Version 2 treats research quality as a chain of inspectable evidence rather
+than a visual label.
 
-## Scope
+1. The question, grid, estimand, threshold, and boundary are frozen in
+   `research/protocol.json`.
+2. `src/rv-model.js` contains the same numerical implementation used by the
+   browser and the offline study.
+3. `npm run research` emits every scenario, a summary, and two SVG figures.
+4. The test suite checks physical scaling, convolution, units, parameter
+   rejection, and equivalence of the direct Fisher and quality-factor forms.
+5. Repository validation binds the result to SHA-256 receipts for the protocol
+   and model, checks numerical convergence, and rejects incomplete evidence.
+6. `docs/CLAIMS.md` separates reproduced results from contextual literature
+   statements and prohibited interpretations.
 
-Private spectrograph radial-velocity precision lab with photon-noise scaling and instrument-floor modelling.
-
-## Equations And Models
-
-- Repository metadata completeness
-- Reference-data finite anchor validation
-- Reproducible source integrity
-
-## Reference Anchors
-
-The file `data/research-reference.json` stores benchmark anchors used by `scripts/validate_repository.mjs`. These are intentionally small and auditable so the repository can be checked without network access.
-
-## Browser Upgrade
-
-If this repository contains a browser interface, `research-overlay.js` adds a non-invasive mission-control quality panel with validation status and benchmark telemetry.
-
-## References
-
-- Wilson, G. et al., 2017. Good enough practices in scientific computing. PLOS Computational Biology, 13(6), p.e1005510.
+The maturity rubric is stored in `research/maturity-rubric.json`. Its 41→95
+comparison is a repository-practice audit, not peer review.

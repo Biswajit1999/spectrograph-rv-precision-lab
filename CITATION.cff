@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use this software or its generated evidence, please cite it as below."
+title: "Spectrograph RV Precision Lab: proxy versus photon-information audit"
+type: software
+authors:
+  - family-names: Jana
+    given-names: Biswajit
+    orcid: "https://orcid.org/0009-0002-2411-1891"
+version: 2.0.0
+date-released: 2026-09-24
+repository-code: "https://github.com/Biswajit1999/spectrograph-rv-precision-lab"
+url: "https://biswajit1999.github.io/spectrograph-rv-precision-lab/"
+license: MIT
+keywords:
+  - radial velocity
+  - spectroscopy
+  - Fisher information
+  - reproducible research

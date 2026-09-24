@@ -1,22 +1,50 @@
-const C=299792.458;
-function lin(a,b,n){return Array.from({length:n},(_,i)=>a+(b-a)*i/(n-1))}
-function trap(f,a,b,n=256){let s=0,dx=(b-a)/(n-1);for(let i=0;i<n;i++){const w=(i===0||i===n-1)?0.5:1;s+=w*f(a+i*dx)}return s*dx}
-function heat(n,fn,label){const values=[];let min=Infinity,max=-Infinity;for(let j=0;j<n;j++)for(let i=0;i<n;i++){const v=fn(i/(n-1),j/(n-1));values.push(v);min=Math.min(min,v);max=Math.max(max,v)}return{n,label,values:values.map(v=>(v-min)/(max-min||1))}}
-function cmb(p){const x=lin(2,2500,900),y=x.map(l=>{const shift=(p.omegaM/0.315)**.18*(0.674/p.h)**.25;const ns=(l/220)**(p.ns-0.965);const peaks=[[220*shift,5740,80],[540*shift,2550,110],[800*shift,2500,130],[1120*shift,1200,170],[1450*shift,650,220]];let d=850*(l/80)**.2*Math.exp(-l/1600);for(const [c,a,w] of peaks)d+=a*Math.exp(-.5*((l-c)/w)**2);return d*ns*Math.exp(-p.lensing*l/4800)});return{series:[{name:'TT spectrum model',x,y,color:'#4fb8a8'}],metrics:{peak_ell:x[y.indexOf(Math.max(...y))],peak_power:Math.max(...y),damping_ratio:y.at(-1)/Math.max(...y)},heatmap:heat(72,(a,b)=>Math.exp(-3*((a-.35)**2+(b-.55)**2)),'acoustic response')}} 
-function supernova(p){const x=lin(.01,1.5,500),Ez=z=>Math.sqrt(p.omegaM*(1+z)**3+(1-p.omegaM)),mu=z=>5*Math.log10((1+z)*(C/p.H0)*trap(q=>1/Ez(q),0,z,300))+25+p.MBias;const y=x.map(z=>mu(z));return{series:[{name:'flat LCDM distance modulus',x,y,color:'#4fb8a8'}],metrics:{mu_z_1:mu(1),q0:1.5*p.omegaM-1,scatter:p.scatter},heatmap:heat(72,(a,b)=>Math.abs(mu(.1+a*1.2)-(36+b*9))/9,'Hubble residual field')}}
-function frb(p){const x=lin(350,1800,500),ref=p.nuHigh,y=x.map(nu=>4.148808e3*p.dm*(nu**-2-ref**-2));return{series:[{name:'cold plasma delay',x,y,color:'#4fb8a8'}],metrics:{delay_400_MHz:4.148808e3*p.dm*(400**-2-ref**-2),delay_800_MHz:4.148808e3*p.dm*(800**-2-ref**-2),width_ms:p.width},heatmap:heat(96,(a,b)=>Math.exp(-((b-(.15+.7*a**-2))**2)/(0.002+p.width/9000)),'frequency-time sweep')}}
-function microlensing(p){const x=lin(-4*p.tE,4*p.tE,700),amp=u=>(u*u+2)/(u*Math.sqrt(u*u+4)),y=x.map(t=>1+p.blend+(1-p.blend)*(amp(Math.sqrt(p.u0*p.u0+(t/p.tE)**2))-1));return{series:[{name:'Paczynski light curve',x,y,color:'#ffd166'}],metrics:{peak_flux:Math.max(...y),magnification:amp(p.u0),fwhm_days:2*p.tE*Math.sqrt(Math.max(0,2*p.u0*Math.sqrt(p.u0*p.u0+4)-p.u0*p.u0))},heatmap:heat(72,(a,b)=>amp(Math.sqrt((p.u0+a)**2+(b*4-2)**2))/amp(p.u0),'magnification field')}}
-function rotation(p){const x=lin(.2,30,650),y=x.map(r=>{const disk=185*Math.sqrt(p.diskMass)*r/(r+3)*Math.exp(-r/55),bulge=150*Math.sqrt(p.bulgeMass)*Math.exp(-r/4),halo=p.haloV*Math.sqrt(1-(p.haloCore/r)*Math.atan(r/p.haloCore));return Math.sqrt(disk*disk+bulge*bulge+halo*halo)});return{series:[{name:'disk+bulge+halo',x,y,color:'#4fb8a8'}],metrics:{v_solar:y[Math.floor((8.2-.2)/(30-.2)*649)],v_flat:y.at(-1),halo_fraction:p.haloV/Math.max(...y)},heatmap:heat(72,(a,b)=>Math.sqrt((p.haloV*a/260)**2+(p.diskMass*b/2.2)**2),'mass decomposition')}}
-function asteroseismology(p){const x=lin(1000,5000,1000),env=f=>Math.exp(-.5*((f-p.nuMax)/650)**2),y=x.map(f=>{let s=.02;for(let n=-12;n<15;n++){const f0=p.nuMax+n*p.deltaNu/2;s+=env(f0)*Math.exp(-.5*((f-f0)/p.linewidth)**2)*(1+.35*Math.cos(p.inclination*Math.PI/180+n))}return s});return{series:[{name:'solar-like p-mode comb',x,y,color:'#4fb8a8'}],metrics:{nu_max:p.nuMax,large_separation:p.deltaNu,peak_power:Math.max(...y)},heatmap:heat(80,(a,b)=>Math.exp(-((b-.5-.2*Math.sin(a*20))**2)/(0.01+p.linewidth/800)),'echelle response')}}
-function shear(p){const x=lin(1,160,650),amp=2.5e-4*(p.sigma8/.81)**2*(p.omegaM/.3)**1.4*(p.zSource/.75)**.8,y=x.map(t=>amp*(t/2)**-.72*Math.exp(-t/220)*(1-.12*p.ia));return{series:[{name:'xi_plus tomographic model',x,y,color:'#7fd6c8'}],metrics:{xi_10:y[Math.floor(9/159*649)],S8:p.sigma8*Math.sqrt(p.omegaM/.3),ia_suppression:1-.12*p.ia},heatmap:heat(72,(a,b)=>((p.sigma8*(.7+a*.4))**2)*(b+.1),'tomographic kernel')}}
-// Minimum planet mass detectable at 5-sigma given the current RV precision, using the
-// standard practical radial-velocity semi-amplitude relation (e.g. Lovis & Fischer, 2010,
-// "Radial Velocity Techniques for Exoplanets", in Exoplanets, ed. S. Seager, eq. 1;
-// assumes a circular orbit, edge-on inclination, and a Sun-mass host, and the low-mass-planet
-// limit Mp << Mstar): K[m/s] = 28.4329 * (Mp/Mjup) * (Mstar/Msun)^(-2/3) * (P/1yr)^(-1/3).
-// Solving for Mp at K = 5*sigma gives the smallest planet this precision could confidently detect.
-function minDetectableMassEarth(sigmaMs,periodDays){const periodYears=periodDays/365.25,massJupiter=5*sigmaMs*Math.cbrt(periodYears)/28.4329;return massJupiter*317.8}
-function spectrograph(p){const x=lin(20,300,500),q=1800*p.resolution*p.lineDepth*Math.sqrt(p.lineDensity),y=x.map(snr=>Math.sqrt((C/(q*snr))**2+p.stability**2)),snrCrossover=C/(q*p.stability),sigma100=y[Math.floor((100-20)/(300-20)*499)];return{series:[{name:'photon-limited RV precision',x,y,color:'#4fb8a8'}],metrics:{Q_factor:q,sigma_100:sigma100,floor:p.stability,snr_floor_crossover:snrCrossover,min_mass_4d_Mearth:minDetectableMassEarth(sigma100,4),min_mass_365d_Mearth:minDetectableMassEarth(sigma100,365.25)},heatmap:heat(80,(a,b)=>Math.exp(-8*(b-.5-.2*Math.sin(a*38))**2)*p.lineDepth,'spectral information density')}}
-function clustering(p){const x=lin(.5,150,800),y=x.map(r=>p.bias*p.bias*(r/p.r0)**(-p.gamma)*Math.exp(-r/65)+p.bao*Math.exp(-.5*((r-105)/10)**2));return{series:[{name:'xi(r) with BAO feature',x,y,color:'#4fb8a8'}],metrics:{xi_5:y[Math.floor((5-.5)/(149.5)*799)],bao_contrast:p.bao,bias:p.bias},heatmap:heat(72,(a,b)=>Math.exp(-((Math.hypot(a-.5,b-.5)-.28)**2)/.002)+.12*Math.sin(80*a)*Math.cos(70*b),'projected pair density')}}
-function atmosphere(p){const x=lin(.6,5.1,700),scale=90*Math.sqrt(p.temperature/1200)*Math.log10(1+p.metallicity),cloud=(1-p.cloudTop),band=(c,w,a,l)=>a*Math.exp(-.5*((l-c)/w)**2),y=x.map(l=>p.radius+cloud*scale*(band(1.4,.12,1,l)+.75*band(2.3,.18,1,l)+1.1*band(4.3,.25,1,l)+.35*band(.95,.08,1,l)));return{series:[{name:'transmission spectrum',x,y,color:'#4fb8a8'}],metrics:{water_band_ppm:Math.max(...y)-p.radius,scale_height_proxy:scale,cloud_transmission:cloud},heatmap:heat(72,(a,b)=>Math.exp(-((b-.5-.22*Math.sin(a*24))**2)/(.01+p.cloudTop*.03)),'retrieval likelihood')}}
-onmessage=e=>{const p=e.data.params;const lab=e.data.lab;const map={cmb,supernova,frb,microlensing,rotation,asteroseismology,shear,spectrograph,clustering,atmosphere};postMessage(map[lab](p))};
+importScripts('src/rv-model.js?v=2.0.0');
+
+const RESOLUTIONS = Array.from({ length: 43 }, (_, index) => 40000 + index * 5000);
+const HEATMAP_RESOLUTIONS = [40000, 60000, 80000, 100000, 120000, 150000, 200000, 250000];
+const HEATMAP_WIDTHS = [1, 2.5, 5, 10];
+
+function compute(parameters) {
+  const exact = [];
+  const proxy = [];
+  for (const resolution of RESOLUTIONS) {
+    const scenario = { ...parameters, resolution };
+    exact.push(RVModel.photonBound(scenario).photonSigmaMs);
+    proxy.push(RVModel.legacyProxySigma(scenario));
+  }
+
+  const current = RVModel.photonBound(parameters);
+  const currentProxy = RVModel.legacyProxySigma(parameters);
+  const at250k = RVModel.photonBound({ ...parameters, resolution: 250000 }).photonSigmaMs;
+  const cells = [];
+  for (const intrinsicFwhmKmS of HEATMAP_WIDTHS) {
+    for (const resolution of HEATMAP_RESOLUTIONS) {
+      const scenario = { ...parameters, intrinsicFwhmKmS, resolution };
+      const bound = RVModel.photonBound(scenario).photonSigmaMs;
+      const estimate = RVModel.legacyProxySigma(scenario);
+      cells.push({ intrinsicFwhmKmS, resolution, optimismFactor: bound / estimate });
+    }
+  }
+
+  return {
+    series: [
+      { name: 'Discrete Fisher bound', x: RESOLUTIONS, y: exact },
+      { name: 'Legacy linear-R proxy', x: RESOLUTIONS, y: proxy }
+    ],
+    current: {
+      ...current,
+      legacyProxySigmaMs: currentProxy,
+      legacyOptimismFactor: current.photonSigmaMs / currentProxy,
+      gainTo250kPercent: 100 * (1 - at250k / current.photonSigmaMs)
+    },
+    heatmap: { resolutions: HEATMAP_RESOLUTIONS, widths: HEATMAP_WIDTHS, cells }
+  };
+}
+
+onmessage = event => {
+  try {
+    postMessage({ ok: true, runId: event.data.runId, payload: compute(event.data.parameters) });
+  } catch (error) {
+    postMessage({ ok: false, runId: event.data.runId, error: error.message });
+  }
+};
