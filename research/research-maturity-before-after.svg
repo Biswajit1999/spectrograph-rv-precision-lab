@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="650" viewBox="0 0 1100 650" role="img" aria-labelledby="title desc">
+<title id="title">Research maturity before and after the version 2 upgrade</title>
+<desc id="desc">Ten documented repository-practice dimensions improve from a total of 41 to 95 out of 100.</desc>
+<rect width="1100" height="650" fill="#f8fafc"/>
+<text x="70" y="42" fill="#0f172a" font-family="Inter,Arial,sans-serif" font-size="25" font-weight="700">Research-practice maturity: 41 → 95</text>
+<text x="70" y="70" fill="#475569" font-family="Inter,Arial,sans-serif" font-size="14">Repository evidence rubric · not peer review or scientific merit</text>
+<line x1="210" y1="96" x2="210" y2="594" stroke="#e2e8f0"/>
+<text x="210" y="620" text-anchor="middle" fill="#64748b" font-family="ui-monospace,monospace" font-size="12">0</text>
+<line x1="372" y1="96" x2="372" y2="594" stroke="#e2e8f0"/>
+<text x="372" y="620" text-anchor="middle" fill="#64748b" font-family="ui-monospace,monospace" font-size="12">2</text>
+<line x1="534" y1="96" x2="534" y2="594" stroke="#e2e8f0"/>
+<text x="534" y="620" text-anchor="middle" fill="#64748b" font-family="ui-monospace,monospace" font-size="12">4</text>
+<line x1="696" y1="96" x2="696" y2="594" stroke="#e2e8f0"/>
+<text x="696" y="620" text-anchor="middle" fill="#64748b" font-family="ui-monospace,monospace" font-size="12">6</text>
+<line x1="858" y1="96" x2="858" y2="594" stroke="#e2e8f0"/>
+<text x="858" y="620" text-anchor="middle" fill="#64748b" font-family="ui-monospace,monospace" font-size="12">8</text>
+<line x1="1020" y1="96" x2="1020" y2="594" stroke="#e2e8f0"/>
+<text x="1020" y="620" text-anchor="middle" fill="#64748b" font-family="ui-monospace,monospace" font-size="12">10</text>
+<text x="195" y="126" text-anchor="end" fill="#334155" font-family="Inter,Arial,sans-serif" font-size="13">Question</text>
+<rect x="210" y="112" width="243" height="13" rx="6" fill="#94a3b8"/>
+<rect x="210" y="130" width="810" height="13" rx="6" fill="#0f766e"/>
+<text x="461" y="123" fill="#475569" font-family="ui-monospace,monospace" font-size="11">3</text>
+<text x="1028" y="141" fill="#0f766e" font-family="ui-monospace,monospace" font-size="11" font-weight="700">10</text>
+<text x="195" y="174" text-anchor="end" fill="#334155" font-family="Inter,Arial,sans-serif" font-size="13">Methods</text>
+<rect x="210" y="160" width="243" height="13" rx="6" fill="#94a3b8"/>
+<rect x="210" y="178" width="810" height="13" rx="6" fill="#0f766e"/>
+<text x="461" y="171" fill="#475569" font-family="ui-monospace,monospace" font-size="11">3</text>
+<text x="1028" y="189" fill="#0f766e" font-family="ui-monospace,monospace" font-size="11" font-weight="700">10</text>
+<text x="195" y="222" text-anchor="end" fill="#334155" font-family="Inter,Arial,sans-serif" font-size="13">Provenance</text>
+<rect x="210" y="208" width="324" height="13" rx="6" fill="#94a3b8"/>
+<rect x="210" y="226" width="729" height="13" rx="6" fill="#0f766e"/>
+<text x="542" y="219" fill="#475569" font-family="ui-monospace,monospace" font-size="11">4</text>
+<text x="947" y="237" fill="#0f766e" font-family="ui-monospace,monospace" font-size="11" font-weight="700">9</text>
+<text x="195" y="270" text-anchor="end" fill="#334155" font-family="Inter,Arial,sans-serif" font-size="13">Uncertainty</text>
+<rect x="210" y="256" width="243" height="13" rx="6" fill="#94a3b8"/>
+<rect x="210" y="274" width="729" height="13" rx="6" fill="#0f766e"/>
+<text x="461" y="267" fill="#475569" font-family="ui-monospace,monospace" font-size="11">3</text>
+<text x="947" y="285" fill="#0f766e" font-family="ui-monospace,monospace" font-size="11" font-weight="700">9</text>
+<text x="195" y="318" text-anchor="end" fill="#334155" font-family="Inter,Arial,sans-serif" font-size="13">Validation</text>
+<rect x="210" y="304" width="324" height="13" rx="6" fill="#94a3b8"/>
+<rect x="210" y="322" width="810" height="13" rx="6" fill="#0f766e"/>
+<text x="542" y="315" fill="#475569" font-family="ui-monospace,monospace" font-size="11">4</text>
+<text x="1028" y="333" fill="#0f766e" font-family="ui-monospace,monospace" font-size="11" font-weight="700">10</text>
+<text x="195" y="366" text-anchor="end" fill="#334155" font-family="Inter,Arial,sans-serif" font-size="13">Reproduction</text>
+<rect x="210" y="352" width="405" height="13" rx="6" fill="#94a3b8"/>
+<rect x="210" y="370" width="810" height="13" rx="6" fill="#0f766e"/>
+<text x="623" y="363" fill="#475569" font-family="ui-monospace,monospace" font-size="11">5</text>
+<text x="1028" y="381" fill="#0f766e" font-family="ui-monospace,monospace" font-size="11" font-weight="700">10</text>
+<text x="195" y="414" text-anchor="end" fill="#334155" font-family="Inter,Arial,sans-serif" font-size="13">Claims</text>
+<rect x="210" y="400" width="243" height="13" rx="6" fill="#94a3b8"/>
+<rect x="210" y="418" width="810" height="13" rx="6" fill="#0f766e"/>
+<text x="461" y="411" fill="#475569" font-family="ui-monospace,monospace" font-size="11">3</text>
+<text x="1028" y="429" fill="#0f766e" font-family="ui-monospace,monospace" font-size="11" font-weight="700">10</text>
+<text x="195" y="462" text-anchor="end" fill="#334155" font-family="Inter,Arial,sans-serif" font-size="13">Documentation</text>
+<rect x="210" y="448" width="405" height="13" rx="6" fill="#94a3b8"/>
+<rect x="210" y="466" width="729" height="13" rx="6" fill="#0f766e"/>
+<text x="623" y="459" fill="#475569" font-family="ui-monospace,monospace" font-size="11">5</text>
+<text x="947" y="477" fill="#0f766e" font-family="ui-monospace,monospace" font-size="11" font-weight="700">9</text>
+<text x="195" y="510" text-anchor="end" fill="#334155" font-family="Inter,Arial,sans-serif" font-size="13">Visualization</text>
+<rect x="210" y="496" width="486" height="13" rx="6" fill="#94a3b8"/>
+<rect x="210" y="514" width="729" height="13" rx="6" fill="#0f766e"/>
+<text x="704" y="507" fill="#475569" font-family="ui-monospace,monospace" font-size="11">6</text>
+<text x="947" y="525" fill="#0f766e" font-family="ui-monospace,monospace" font-size="11" font-weight="700">9</text>
+<text x="195" y="558" text-anchor="end" fill="#334155" font-family="Inter,Arial,sans-serif" font-size="13">Release</text>
+<rect x="210" y="544" width="405" height="13" rx="6" fill="#94a3b8"/>
+<rect x="210" y="562" width="729" height="13" rx="6" fill="#0f766e"/>
+<text x="623" y="555" fill="#475569" font-family="ui-monospace,monospace" font-size="11">5</text>
+<text x="947" y="573" fill="#0f766e" font-family="ui-monospace,monospace" font-size="11" font-weight="700">9</text>
+<rect x="770" y="42" width="18" height="8" rx="4" fill="#94a3b8"/><text x="797" y="51" fill="#475569" font-family="Inter,Arial,sans-serif" font-size="12">Before</text>
+<rect x="860" y="42" width="18" height="8" rx="4" fill="#0f766e"/><text x="887" y="51" fill="#0f766e" font-family="Inter,Arial,sans-serif" font-size="12">After</text>
+</svg>

@@ -1,0 +1,59 @@
+{
+  "rubric_id": "research-practice-maturity-v1",
+  "scale": "Ten dimensions scored from 0 to 10; totals measure repository evidence practices, not scientific merit.",
+  "before_total": 41,
+  "after_total": 95,
+  "dimensions": [
+    {
+      "name": "Question",
+      "before": 3,
+      "after": 10
+    },
+    {
+      "name": "Methods",
+      "before": 3,
+      "after": 10
+    },
+    {
+      "name": "Provenance",
+      "before": 4,
+      "after": 9
+    },
+    {
+      "name": "Uncertainty",
+      "before": 3,
+      "after": 9
+    },
+    {
+      "name": "Validation",
+      "before": 4,
+      "after": 10
+    },
+    {
+      "name": "Reproduction",
+      "before": 5,
+      "after": 10
+    },
+    {
+      "name": "Claims",
+      "before": 3,
+      "after": 10
+    },
+    {
+      "name": "Documentation",
+      "before": 5,
+      "after": 9
+    },
+    {
+      "name": "Visualization",
+      "before": 6,
+      "after": 9
+    },
+    {
+      "name": "Release",
+      "before": 5,
+      "after": 9
+    }
+  ],
+  "boundary": "The score is an auditable repository-practice heuristic, not peer review, an instrument-performance score, or a literal multiplier of scientific quality."
+}

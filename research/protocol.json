@@ -1,0 +1,23 @@
+{
+  "protocol_id": "rv-proxy-fisher-audit-v1",
+  "frozen_before_results": true,
+  "research_question": "After calibration at one fiducial spectrum, does a linear resolving-power proxy preserve the discrete photon-information bound across stellar line-width, depth, and line-count regimes?",
+  "estimand": "The ratio of the exact synthetic-spectrum Fisher lower bound to the calibrated legacy proxy uncertainty.",
+  "primary_rule": "The proxy is materially optimistic when exact_sigma_ms / proxy_sigma_ms is at least 2.",
+  "parameter_grid": {
+    "resolution": [40000, 60000, 80000, 100000, 120000, 150000, 200000, 250000],
+    "intrinsic_fwhm_km_s": [1, 2.5, 5, 10],
+    "line_depth": [0.2, 0.45, 0.7],
+    "line_count": [20, 40, 80]
+  },
+  "fixed_conditions": {
+    "velocity_span_m_s": 3000000,
+    "continuum_electron_budget": 1000000000,
+    "pixels_per_resolution_element": 4,
+    "line_profiles": "Equal-depth Gaussian absorption lines with conserved equivalent width under Gaussian instrumental broadening.",
+    "line_locations": "Deterministic equally spaced centres at half-cell offsets across the fixed velocity span.",
+    "detector_noise": "None; photon noise only.",
+    "calibration": "The legacy proxy is normalized to the exact result at R=100000, intrinsic FWHM=2.5 km/s, depth=0.45, and 40 lines."
+  },
+  "boundary": "This is a controlled synthetic Fisher-information experiment, not an end-to-end spectrograph forecast, exposure-time calculator, stellar template, calibration model, or planet-detection completeness study."
+}

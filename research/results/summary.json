@@ -1,0 +1,77 @@
+{
+  "protocol_id": "rv-proxy-fisher-audit-v1",
+  "generated_utc": "2026-09-24T00:00:00Z",
+  "scenario_count": 288,
+  "primary_rule": "The proxy is materially optimistic when exact_sigma_ms / proxy_sigma_ms is at least 2.",
+  "primary_result": {
+    "materially_optimistic_scenarios": 39,
+    "materially_optimistic_fraction": 0.13541666666666666,
+    "maximum_optimism_factor": 2.924493971957601,
+    "maximum_optimism_scenario": {
+      "resolution": 40000,
+      "intrinsic_fwhm_km_s": 1,
+      "line_depth": 0.2,
+      "line_count": 80,
+      "exact_sigma_m_s": 13.834543230431246,
+      "proxy_sigma_m_s": 4.730576764078834
+    },
+    "minimum_exact_to_proxy_ratio": 0.5119145394073514,
+    "median_exact_to_proxy_ratio": 1.2122611579953428
+  },
+  "resolution_saturation": {
+    "legacy_proxy_gain_percent_R100k_to_R250k": 60,
+    "exact_gain_by_intrinsic_fwhm_km_s": {
+      "1": {
+        "median_exact_gain_percent_R100k_to_R250k": 66.88767701003549,
+        "minimum_exact_gain_percent_R100k_to_R250k": 65.92634998839513,
+        "maximum_exact_gain_percent_R100k_to_R250k": 68.07054639449473
+      },
+      "5": {
+        "median_exact_gain_percent_R100k_to_R250k": 18.876145729457804,
+        "minimum_exact_gain_percent_R100k_to_R250k": 17.770948939056876,
+        "maximum_exact_gain_percent_R100k_to_R250k": 20.885774587182272
+      },
+      "10": {
+        "median_exact_gain_percent_R100k_to_R250k": 5.861231841023051,
+        "minimum_exact_gain_percent_R100k_to_R250k": 5.453699107210241,
+        "maximum_exact_gain_percent_R100k_to_R250k": 6.672646203270016
+      },
+      "2.5": {
+        "median_exact_gain_percent_R100k_to_R250k": 42.708301149222294,
+        "minimum_exact_gain_percent_R100k_to_R250k": 41.09225868701337,
+        "maximum_exact_gain_percent_R100k_to_R250k": 45.19655156332122
+      }
+    }
+  },
+  "calibration_check": {
+    "exact_sigma_m_s": 1.1893414786857452,
+    "proxy_sigma_m_s": 1.1893414786857452,
+    "ratio": 1
+  },
+  "numerical_convergence": {
+    "comparison": "Primary four pixels per resolution element versus eight pixels per resolution element across all scenarios.",
+    "maximum_relative_sigma_difference": 0.0000011619485476354495,
+    "material_optimism_classification_changes": 0
+  },
+  "legacy_unit_audit": {
+    "q_surrogate_at_old_default": 931.5,
+    "old_numerical_value_labelled_m_s": 3.2183838754696725,
+    "value_if_speed_of_light_is_converted_to_m_s": 3218.3838754696726,
+    "unit_factor": 1000
+  },
+  "fixed_conditions": {
+    "velocity_span_m_s": 3000000,
+    "continuum_electron_budget": 1000000000,
+    "pixels_per_resolution_element": 4,
+    "line_profiles": "Equal-depth Gaussian absorption lines with conserved equivalent width under Gaussian instrumental broadening.",
+    "line_locations": "Deterministic equally spaced centres at half-cell offsets across the fixed velocity span.",
+    "detector_noise": "None; photon noise only.",
+    "calibration": "The legacy proxy is normalized to the exact result at R=100000, intrinsic FWHM=2.5 km/s, depth=0.45, and 40 lines."
+  },
+  "boundary": "This is a controlled synthetic Fisher-information experiment, not an end-to-end spectrograph forecast, exposure-time calculator, stellar template, calibration model, or planet-detection completeness study.",
+  "provenance": {
+    "protocol_sha256": "2db858119620764dee3f05aa3a7ee081d8580b1f11b7199f2a022007d256441a",
+    "model_sha256": "fbd24772925be1939bc5ff15a03780df02b37a3a445dfdeb18d741fc06067cf5",
+    "method_reference": "Bouchy, Pepe & Queloz (2001), doi:10.1051/0004-6361:20010730"
+  }
+}

@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="650" viewBox="0 0 1100 650" role="img" aria-labelledby="title desc">
+<title id="title">Legacy proxy optimism by resolving power and intrinsic line width</title>
+<desc id="desc">The ratio of the exact Fisher uncertainty to the calibrated legacy proxy. Values above two fail the predeclared material-optimism rule.</desc>
+<rect width="1100" height="650" fill="#f8fafc"/>
+<text x="95" y="34" fill="#0f172a" font-family="Inter,Arial,sans-serif" font-size="24" font-weight="700">Where the linear-resolution proxy becomes overconfident</text>
+<text x="95" y="58" fill="#475569" font-family="Inter,Arial,sans-serif" font-size="14">Fiducial depth 0.45 · 40 Gaussian lines · fixed 10⁹ continuum electrons</text>
+<line x1="95" y1="564" x2="950" y2="564" stroke="#dbe4e8"/>
+<text x="81" y="569" text-anchor="end" fill="#52616b" font-family="ui-monospace,monospace" font-size="13">0×</text>
+<line x1="95" y1="441" x2="950" y2="441" stroke="#dbe4e8"/>
+<text x="81" y="446" text-anchor="end" fill="#52616b" font-family="ui-monospace,monospace" font-size="13">1×</text>
+<line x1="95" y1="318" x2="950" y2="318" stroke="#dbe4e8"/>
+<text x="81" y="323" text-anchor="end" fill="#52616b" font-family="ui-monospace,monospace" font-size="13">2×</text>
+<line x1="95" y1="195" x2="950" y2="195" stroke="#dbe4e8"/>
+<text x="81" y="200" text-anchor="end" fill="#52616b" font-family="ui-monospace,monospace" font-size="13">3×</text>
+<line x1="95" y1="72" x2="950" y2="72" stroke="#dbe4e8"/>
+<text x="81" y="77" text-anchor="end" fill="#52616b" font-family="ui-monospace,monospace" font-size="13">4×</text>
+<line x1="95" y1="72" x2="95" y2="564" stroke="#edf2f4"/>
+<text x="95" y="592" text-anchor="middle" fill="#52616b" font-family="ui-monospace,monospace" font-size="13">40k</text>
+<line x1="257.8571428571429" y1="72" x2="257.8571428571429" y2="564" stroke="#edf2f4"/>
+<text x="257.8571428571429" y="592" text-anchor="middle" fill="#52616b" font-family="ui-monospace,monospace" font-size="13">80k</text>
+<line x1="420.7142857142857" y1="72" x2="420.7142857142857" y2="564" stroke="#edf2f4"/>
+<text x="420.7142857142857" y="592" text-anchor="middle" fill="#52616b" font-family="ui-monospace,monospace" font-size="13">120k</text>
+<line x1="583.5714285714286" y1="72" x2="583.5714285714286" y2="564" stroke="#edf2f4"/>
+<text x="583.5714285714286" y="592" text-anchor="middle" fill="#52616b" font-family="ui-monospace,monospace" font-size="13">160k</text>
+<line x1="746.4285714285714" y1="72" x2="746.4285714285714" y2="564" stroke="#edf2f4"/>
+<text x="746.4285714285714" y="592" text-anchor="middle" fill="#52616b" font-family="ui-monospace,monospace" font-size="13">200k</text>
+<line x1="950" y1="72" x2="950" y2="564" stroke="#edf2f4"/>
+<text x="950" y="592" text-anchor="middle" fill="#52616b" font-family="ui-monospace,monospace" font-size="13">250k</text>
+<line x1="95" y1="318" x2="950" y2="318" stroke="#b45309" stroke-width="2" stroke-dasharray="8 7"/>
+<text x="942" y="308" text-anchor="end" fill="#92400e" font-family="Inter,Arial,sans-serif" font-size="13" font-weight="700">2× material-optimism threshold</text>
+<polyline points="95.00,207.62 176.43,270.70 257.86,306.43 339.29,329.07 420.71,344.18 542.86,358.28 746.43,368.55 950.00,369.52" fill="none" stroke="#0f766e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="950" cy="369.51992389964465" r="5" fill="#0f766e"/>
+<text x="964" y="374.51992389964465" fill="#0f766e" font-family="Inter,Arial,sans-serif" font-size="14" font-weight="700">1 km/s</text>
+<polyline points="95.00,415.41 176.43,433.89 257.86,440.39 339.29,441.00 420.71,438.19 542.86,430.12 746.43,410.89 950.00,387.83" fill="none" stroke="#0284c7" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="950" cy="387.8280260338586" r="5" fill="#0284c7"/>
+<text x="964" y="392.8280260338586" fill="#0284c7" font-family="Inter,Arial,sans-serif" font-size="14" font-weight="700">2.5 km/s</text>
+<polyline points="95.00,476.59 176.43,475.04 257.86,466.93 339.29,455.73 420.71,442.83 542.86,421.66 746.43,383.84 950.00,344.43" fill="none" stroke="#7c3aed" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="950" cy="344.42653229385326" r="5" fill="#7c3aed"/>
+<text x="964" y="349.42653229385326" fill="#7c3aed" font-family="Inter,Arial,sans-serif" font-size="14" font-weight="700">5 km/s</text>
+<polyline points="95.00,495.36 176.43,478.32 257.86,458.14 339.29,436.61 420.71,414.37 542.86,380.30 746.43,322.53 950.00,264.18" fill="none" stroke="#be123c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="950" cy="264.18297755709824" r="5" fill="#be123c"/>
+<text x="964" y="269.18297755709824" fill="#be123c" font-family="Inter,Arial,sans-serif" font-size="14" font-weight="700">10 km/s</text>
+<line x1="95" y1="564" x2="950" y2="564" stroke="#64748b" stroke-width="1.5"/>
+<line x1="95" y1="72" x2="95" y2="564" stroke="#64748b" stroke-width="1.5"/>
+<text x="522.5" y="624" text-anchor="middle" fill="#334155" font-family="Inter,Arial,sans-serif" font-size="15" font-weight="600">Resolving power R</text>
+<text transform="translate(24 318) rotate(-90)" text-anchor="middle" fill="#334155" font-family="Inter,Arial,sans-serif" font-size="15" font-weight="600">Exact uncertainty / legacy proxy uncertainty</text>
+</svg>
