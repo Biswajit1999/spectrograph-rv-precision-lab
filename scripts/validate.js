@@ -9,6 +9,9 @@ const required = [
   'docs/CLAIMS.md', 'docs/LIMITATIONS.md', 'docs/REPRODUCIBILITY.md'
 ];
 const failures = [];
+const hashTextFile = file => crypto.createHash('sha256')
+  .update(fs.readFileSync(file, 'utf8').replaceAll('\r\n', '\n'))
+  .digest('hex');
 for (const file of required) if (!fs.existsSync(file)) failures.push(`${file} missing`);
 
 if (!failures.length) {
@@ -16,8 +19,8 @@ if (!failures.length) {
   const summary = JSON.parse(fs.readFileSync('research/results/summary.json', 'utf8'));
   const references = JSON.parse(fs.readFileSync('data/reference.json', 'utf8'));
   const rows = fs.readFileSync('research/results/proxy-audit.csv', 'utf8').trim().split(/\r?\n/);
-  const protocolHash = crypto.createHash('sha256').update(fs.readFileSync('research/protocol.json')).digest('hex');
-  const modelHash = crypto.createHash('sha256').update(fs.readFileSync('src/rv-model.js')).digest('hex');
+  const protocolHash = hashTextFile('research/protocol.json');
+  const modelHash = hashTextFile('src/rv-model.js');
   if (summary.protocol_id !== protocol.protocol_id) failures.push('protocol/result identifier mismatch');
   if (summary.scenario_count !== 288 || rows.length !== 289) failures.push('scenario table must contain 288 data rows');
   if (summary.provenance.protocol_sha256 !== protocolHash) failures.push('protocol SHA-256 mismatch');

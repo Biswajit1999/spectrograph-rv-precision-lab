@@ -14,7 +14,9 @@ const figuresDir = path.join(root, 'research', 'figures');
 fs.mkdirSync(resultsDir, { recursive: true });
 fs.mkdirSync(figuresDir, { recursive: true });
 
-const hashFile = filePath => crypto.createHash('sha256').update(fs.readFileSync(filePath)).digest('hex');
+const hashFile = filePath => crypto.createHash('sha256')
+  .update(fs.readFileSync(filePath, 'utf8').replaceAll('\r\n', '\n'))
+  .digest('hex');
 const fixed = (value, digits = 9) => Number(value).toFixed(digits);
 const median = values => {
   const sorted = [...values].sort((a, b) => a - b);
