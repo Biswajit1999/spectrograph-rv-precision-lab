@@ -70,8 +70,8 @@
   },
   "boundary": "This is a controlled synthetic Fisher-information experiment, not an end-to-end spectrograph forecast, exposure-time calculator, stellar template, calibration model, or planet-detection completeness study.",
   "provenance": {
-    "protocol_sha256": "2db858119620764dee3f05aa3a7ee081d8580b1f11b7199f2a022007d256441a",
-    "model_sha256": "fbd24772925be1939bc5ff15a03780df02b37a3a445dfdeb18d741fc06067cf5",
+    "protocol_sha256": "13cd63ec902743cc30f6123c5dc4b06579e8db3fb11ee3a3f0f09bcf3cb3699c",
+    "model_sha256": "1a81c096fbb48ce15703fabfc49fda737d1e8aa9e29b35d8bda2806b9971423d",
     "method_reference": "Bouchy, Pepe & Queloz (2001), doi:10.1051/0004-6361:20010730"
   }
 }

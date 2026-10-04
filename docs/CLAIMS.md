@@ -15,4 +15,3 @@
 - No planet is detected and no planet-mass completeness limit is estimated.
 - The Fisher bound is not an achieved precision, error bar on real data, or
   exposure-time estimate.
-- The maturity score is not peer review or scientific impact.

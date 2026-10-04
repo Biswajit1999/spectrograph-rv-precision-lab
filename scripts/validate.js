@@ -5,8 +5,7 @@ const required = [
   'README.md', 'index.html', 'styles.css', 'app.js', 'physicsWorker.js',
   'src/rv-model.js', 'data/reference.json', 'research/protocol.json',
   'research/results/proxy-audit.csv', 'research/results/summary.json',
-  'research/figures/proxy-optimism-by-resolution.svg',
-  'research/research-maturity-before-after.svg', 'docs/METHODS.md',
+  'research/figures/proxy-optimism-by-resolution.svg', 'docs/METHODS.md',
   'docs/CLAIMS.md', 'docs/LIMITATIONS.md', 'docs/REPRODUCIBILITY.md'
 ];
 const failures = [];
@@ -30,7 +29,7 @@ if (!failures.length) {
     if (!source.doi || !source.url || !source.claim_boundary) failures.push(`incomplete source record ${source.id || 'unknown'}`);
   }
   const html = fs.readFileSync('index.html', 'utf8');
-  for (const marker of ['skip-link', 'research/results/summary.json', 'Boundary of inference', 'research-maturity-before-after.svg']) {
+  for (const marker of ['skip-link', 'research/results/summary.json', 'Boundary of inference']) {
     if (!html.includes(marker)) failures.push(`index missing ${marker}`);
   }
   const combined = required.filter(file => fs.existsSync(file)).map(file => fs.readFileSync(file, 'utf8')).join('\n');

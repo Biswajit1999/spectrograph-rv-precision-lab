@@ -12,8 +12,8 @@
 npm run verify
 ```
 
-`npm run research` regenerates the 288-row CSV, summary JSON, proxy-comparison
-SVG, maturity rubric, and before/after SVG with canonical LF line endings.
+`npm run research` regenerates the 288-row CSV, summary JSON, and
+proxy-comparison SVG with canonical LF line endings.
 `npm test` runs the numerical contracts. `npm run check` validates syntax,
 evidence counts, source-ledger structure, SHA-256 bindings, convergence, and
 required interface language.

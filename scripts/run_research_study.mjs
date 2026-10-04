@@ -179,27 +179,6 @@ for (const row of rows) {
 fs.writeFileSync(path.join(resultsDir, 'proxy-audit.csv'), `${csvLines.join('\n')}\n`);
 fs.writeFileSync(path.join(resultsDir, 'summary.json'), `${JSON.stringify(summary, null, 2)}\n`);
 
-const maturity = {
-  rubric_id: 'research-practice-maturity-v1',
-  scale: 'Ten dimensions scored from 0 to 10; totals measure repository evidence practices, not scientific merit.',
-  before_total: 41,
-  after_total: 95,
-  dimensions: [
-    { name: 'Question', before: 3, after: 10 },
-    { name: 'Methods', before: 3, after: 10 },
-    { name: 'Provenance', before: 4, after: 9 },
-    { name: 'Uncertainty', before: 3, after: 9 },
-    { name: 'Validation', before: 4, after: 10 },
-    { name: 'Reproduction', before: 5, after: 10 },
-    { name: 'Claims', before: 3, after: 10 },
-    { name: 'Documentation', before: 5, after: 9 },
-    { name: 'Visualization', before: 6, after: 9 },
-    { name: 'Release', before: 5, after: 9 }
-  ],
-  boundary: 'The score is an auditable repository-practice heuristic, not peer review, an instrument-performance score, or a literal multiplier of scientific quality.'
-};
-fs.writeFileSync(path.join(root, 'research', 'maturity-rubric.json'), `${JSON.stringify(maturity, null, 2)}\n`);
-
 function optimismSvg() {
   const width = 1100;
   const height = 650;
@@ -255,43 +234,7 @@ function optimismSvg() {
   return `${parts.join('\n')}\n`;
 }
 
-function maturitySvg() {
-  const width = 1100;
-  const height = 650;
-  const plotLeft = 210;
-  const plotRight = 1020;
-  const rowHeight = 48;
-  const plotTop = 112;
-  const scale = value => plotLeft + value / 10 * (plotRight - plotLeft);
-  const parts = [
-    `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img" aria-labelledby="title desc">`,
-    '<title id="title">Research maturity before and after the version 2 upgrade</title>',
-    '<desc id="desc">Ten documented repository-practice dimensions improve from a total of 41 to 95 out of 100.</desc>',
-    '<rect width="1100" height="650" fill="#f8fafc"/>',
-    '<text x="70" y="42" fill="#0f172a" font-family="Inter,Arial,sans-serif" font-size="25" font-weight="700">Research-practice maturity: 41 → 95</text>',
-    '<text x="70" y="70" fill="#475569" font-family="Inter,Arial,sans-serif" font-size="14">Repository evidence rubric · not peer review or scientific merit</text>'
-  ];
-  for (let tick = 0; tick <= 10; tick += 2) {
-    const x = scale(tick);
-    parts.push(`<line x1="${x}" y1="96" x2="${x}" y2="594" stroke="#e2e8f0"/>`);
-    parts.push(`<text x="${x}" y="620" text-anchor="middle" fill="#64748b" font-family="ui-monospace,monospace" font-size="12">${tick}</text>`);
-  }
-  maturity.dimensions.forEach((dimension, index) => {
-    const y = plotTop + index * rowHeight;
-    parts.push(`<text x="195" y="${y + 14}" text-anchor="end" fill="#334155" font-family="Inter,Arial,sans-serif" font-size="13">${dimension.name}</text>`);
-    parts.push(`<rect x="${plotLeft}" y="${y}" width="${scale(dimension.before) - plotLeft}" height="13" rx="6" fill="#94a3b8"/>`);
-    parts.push(`<rect x="${plotLeft}" y="${y + 18}" width="${scale(dimension.after) - plotLeft}" height="13" rx="6" fill="#0f766e"/>`);
-    parts.push(`<text x="${scale(dimension.before) + 8}" y="${y + 11}" fill="#475569" font-family="ui-monospace,monospace" font-size="11">${dimension.before}</text>`);
-    parts.push(`<text x="${scale(dimension.after) + 8}" y="${y + 29}" fill="#0f766e" font-family="ui-monospace,monospace" font-size="11" font-weight="700">${dimension.after}</text>`);
-  });
-  parts.push('<rect x="770" y="42" width="18" height="8" rx="4" fill="#94a3b8"/><text x="797" y="51" fill="#475569" font-family="Inter,Arial,sans-serif" font-size="12">Before</text>');
-  parts.push('<rect x="860" y="42" width="18" height="8" rx="4" fill="#0f766e"/><text x="887" y="51" fill="#0f766e" font-family="Inter,Arial,sans-serif" font-size="12">After</text>');
-  parts.push('</svg>');
-  return `${parts.join('\n')}\n`;
-}
-
 fs.writeFileSync(path.join(figuresDir, 'proxy-optimism-by-resolution.svg'), optimismSvg());
-fs.writeFileSync(path.join(root, 'research', 'research-maturity-before-after.svg'), maturitySvg());
 
 console.log(`Generated ${rows.length} scenarios.`);
 console.log(`Materially optimistic: ${materialCount}/${rows.length}.`);

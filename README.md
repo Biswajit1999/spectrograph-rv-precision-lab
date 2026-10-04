@@ -99,14 +99,6 @@ and are not pooled as interchangeable points.
 - Fischer, D. A. et al. (2016), *PASP* 128, 066001.
   <https://doi.org/10.1088/1538-3873/128/964/066001>
 
-## Research-practice maturity
-
-The documented repository-practice rubric changes from **41/100 before** to
-**95/100 after**. This score measures the presence of auditable questions,
-methods, provenance, validation, generated evidence, and claim boundaries. It
-is not peer review, an instrument-performance score, or a literal multiplier of
-scientific quality.
-
 ## License
 
 Code is available under the [MIT License](LICENSE). Citation metadata are in
