@@ -1,5 +1,7 @@
 # Spectrograph RV Precision Lab
 
+![Spectrograph RV Precision Lab scientific cover](assets/social-preview.svg)
+
 A reproducible test of a common radial-velocity shortcut: treating Doppler
 information as proportional to resolving power, line depth, and the square root
 of line count. The version 2 study replaces the old undocumented quality-factor

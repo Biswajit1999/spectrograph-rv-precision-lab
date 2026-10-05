@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="t d">
+<title id="t">Spectrograph RV Precision Lab</title><desc id="d">A stellar absorption spectrum and radial velocity information budget.</desc>
+<defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#101827"/><stop offset="1" stop-color="#182c36"/></linearGradient></defs><rect width="1200" height="630" fill="url(#bg)"/>
+<g opacity=".12" stroke="#9fc9d3"><path d="M0 105h1200M0 210h1200M0 315h1200M0 420h1200M0 525h1200"/><path d="M120 0v630M240 0v630M360 0v630M480 0v630M600 0v630M720 0v630M840 0v630M960 0v630M1080 0v630"/></g>
+<path d="M585 228h45l11 124 13-124h54l9 188 13-188h42l13 96 12-96h64l15 151 13-151h56l8 80 12-80h89" fill="none" stroke="#f0c76e" stroke-width="5" stroke-linejoin="round"/>
+<path d="M585 478c80-9 133-88 211-92s141 62 226 50 99-75 140-92" fill="none" stroke="#77bcc8" stroke-width="4"/>
+<g font-family="Inter,Segoe UI,sans-serif" fill="#edf4f6"><text x="68" y="102" font-size="17" letter-spacing="5" fill="#77bcc8">PHOTON-INFORMATION BOUND</text><text x="68" y="188" font-family="Georgia,serif" font-size="60">Spectrograph RV</text><text x="68" y="254" font-family="Georgia,serif" font-size="60">Precision Lab</text><text x="68" y="318" font-size="21" fill="#afc0c6">Resolving power · sampling · S/N · line density</text><text x="68" y="527" font-size="16" fill="#f0c76e">288 DECLARED SCENARIOS · REPRODUCIBLE AUDIT</text></g>
+</svg>
