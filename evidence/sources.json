@@ -1,0 +1,41 @@
+{
+  "project": "Spectrograph RV Precision Lab",
+  "repository": "https://github.com/Biswajit1999/spectrograph-rv-precision-lab",
+  "files": [
+    {
+      "label": "Project claims",
+      "path": "docs/CLAIMS.md",
+      "role": "Data and provenance"
+    },
+    {
+      "label": "Project methods",
+      "path": "docs/METHODS.md",
+      "role": "Data and provenance"
+    },
+    {
+      "label": "Reference",
+      "path": "data/reference.json",
+      "role": "Data and provenance"
+    },
+    {
+      "label": "Summary",
+      "path": "research/results/summary.json",
+      "role": "Tables and numerical results"
+    },
+    {
+      "label": "Protocol",
+      "path": "research/protocol.json",
+      "role": "Tables and numerical results"
+    },
+    {
+      "label": "Proxy audit",
+      "path": "research/results/proxy-audit.csv",
+      "role": "Tables and numerical results"
+    },
+    {
+      "label": "Proxy optimism by resolution",
+      "path": "research/figures/proxy-optimism-by-resolution.svg",
+      "role": "Figures"
+    }
+  ]
+}

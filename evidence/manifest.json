@@ -1,0 +1,147 @@
+{
+  "schema": 1,
+  "project": "Spectrograph RV Precision Lab",
+  "repository": "https://github.com/Biswajit1999/spectrograph-rv-precision-lab",
+  "files": [
+    {
+      "label": "Project claims",
+      "path": "docs/CLAIMS.md",
+      "role": "Data and provenance",
+      "bytes": 1646,
+      "sha256": "f8620d25614b91740836d9194f7ec17b68603b0be015ec2fecb14b417ffbfeb6",
+      "hash_basis": "LF-normalised text",
+      "format": "MD"
+    },
+    {
+      "label": "Project methods",
+      "path": "docs/METHODS.md",
+      "role": "Data and provenance",
+      "bytes": 2842,
+      "sha256": "203d1f921faff60fc81a2562a0bd740bdf526529096c908cc845891298e74390",
+      "hash_basis": "LF-normalised text",
+      "format": "MD"
+    },
+    {
+      "label": "Reference",
+      "path": "data/reference.json",
+      "role": "Data and provenance",
+      "bytes": 2773,
+      "sha256": "54a389dd4dc2f12ed8c087e7d485f7ddf84ee80b7174500ba16b253999b352dc",
+      "hash_basis": "LF-normalised text",
+      "format": "JSON",
+      "keys": [
+        "dataset",
+        "purpose",
+        "sources"
+      ],
+      "arrays": {
+        "sources": 4
+      }
+    },
+    {
+      "label": "Summary",
+      "path": "research/results/summary.json",
+      "role": "Tables and numerical results",
+      "bytes": 3568,
+      "sha256": "cd773a7c1f5f4d8477019d7a416914c827891b2ea86573eff688c7358b6d973c",
+      "hash_basis": "LF-normalised text",
+      "format": "JSON",
+      "keys": [
+        "protocol_id",
+        "generated_utc",
+        "scenario_count",
+        "primary_rule",
+        "primary_result",
+        "resolution_saturation",
+        "calibration_check"
+      ],
+      "arrays": {}
+    },
+    {
+      "label": "Protocol",
+      "path": "research/protocol.json",
+      "role": "Tables and numerical results",
+      "bytes": 1547,
+      "sha256": "2db858119620764dee3f05aa3a7ee081d8580b1f11b7199f2a022007d256441a",
+      "hash_basis": "LF-normalised text",
+      "format": "JSON",
+      "keys": [
+        "protocol_id",
+        "frozen_before_results",
+        "research_question",
+        "estimand",
+        "primary_rule",
+        "parameter_grid",
+        "fixed_conditions"
+      ],
+      "arrays": {}
+    },
+    {
+      "label": "Proxy audit",
+      "path": "research/results/proxy-audit.csv",
+      "role": "Tables and numerical results",
+      "bytes": 33120,
+      "sha256": "381eca4043ca0b63b1455bec15cd377cd1b5cb15e2fc298fec5993428a564cb1",
+      "hash_basis": "LF-normalised text",
+      "format": "CSV",
+      "rows": 288,
+      "columns": 13,
+      "headers": [
+        "resolution",
+        "intrinsic_fwhm_km_s",
+        "line_depth",
+        "line_count",
+        "exact_sigma_m_s",
+        "proxy_sigma_m_s",
+        "exact_to_proxy_ratio"
+      ],
+      "preview": [
+        [
+          "40000",
+          "1",
+          "0.2",
+          "20",
+          "27.669086461",
+          "9.461153528",
+          "2.924493972"
+        ],
+        [
+          "40000",
+          "1",
+          "0.2",
+          "40",
+          "19.564998666",
+          "6.690045818",
+          "2.924493972"
+        ],
+        [
+          "40000",
+          "1",
+          "0.2",
+          "80",
+          "13.834543230",
+          "4.730576764",
+          "2.924493972"
+        ],
+        [
+          "40000",
+          "1",
+          "0.45",
+          "20",
+          "12.183510518",
+          "4.204957124",
+          "2.897416112"
+        ]
+      ]
+    },
+    {
+      "label": "Proxy optimism by resolution",
+      "path": "research/figures/proxy-optimism-by-resolution.svg",
+      "role": "Figures",
+      "bytes": 5394,
+      "sha256": "1064f6a45f64c04a336fe11bb10a36a6a81ccff3443521c477bc16bf7dccbc00",
+      "hash_basis": "LF-normalised text",
+      "format": "SVG"
+    }
+  ]
+}
