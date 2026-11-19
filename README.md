@@ -13,6 +13,12 @@ surrogate with the discrete photon-information bound of Bouchy, Pepe & Queloz
 · [Inspect all 288 scenarios](research/results/proxy-audit.csv)
 · [Review the claims](docs/CLAIMS.md)
 
+## Research evidence and downloads
+
+[Open the evidence browser](https://biswajit1999.github.io/spectrograph-rv-precision-lab/evidence.html) for 7 selected files, including [`summary.json`](research/results/summary.json). Each file has a download link and SHA-256 digest.
+
+Rebuild the inventory and browser with `python scripts/evidence_catalog.py` and `python scripts/render_evidence_page.py`.
+
 ## Result
 
 The legacy proxy is calibrated to the exact model at one fiducial spectrum, then
